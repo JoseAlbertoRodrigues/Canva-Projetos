@@ -39,6 +39,11 @@ class Projectile {
         c.fillStyle = this.color
         c.fill()
     }
+
+    update() {
+        this.x = this.x + this.velocity.x
+        this.y = this.y + this.velocity.y
+    }
 }
 
 // colocar o jogador no centro
@@ -49,34 +54,17 @@ const y = canvas.height / 2
 const player = new Player(x, y, 30, 'blue')
 player.draw()
 
+function animate() {
+    requestAnimationFrame(animate)
+    projectile.draw()
+    projectile.update()
+}
 
 addEventListener('click', (event) => {
     // const projectile = new Projectile(event.clientX, event.clientY, 5, 'red', null)
-    const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', null)
+    const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', {x: 1, y: 1})
     projectile.draw()
 })
 
-
-// class SnowMan {
-//     constructor(x, y, radius, color) {
-//         this.x = x
-//         this.y = y
-//         this.radius = radius
-//         this.color = color
-//     }
-
-//     draw() {
-//         c.beginPath()
-//         c.arc(this.x, this.y, this.radius, Math.PI * 2, false)
-//         c.fillStyle = this.color
-//         c.fill()
-//     }
-// }
-
-
-// const snowMan = new SnowMan(400, 450, 150, 'red')
-// const snowMan1 = new SnowMan(400, 350, 100, 'black')
-// const snowMan2 = new SnowMan(400, 250, 60, 'pink')
-// snowMan.draw()
-// snowMan1.draw()
-// snowMan2.draw()
+// Chama no final do arquivo
+animate()
