@@ -8,10 +8,12 @@
    OK - Detect collision on enemy / projectile hit
    OK - Detect collision on enemy / player hit
    OK - Remove off screen projectiles
-    - Colorize game
+   OK - Colorize game
     - Shrink enemies on hit
     - Create particles explosion on hit
     - Add score
     - Add game over UI
     - Add restart button
     - Add start game button
+
+# Ferramenta para animação, biblioteca gsap

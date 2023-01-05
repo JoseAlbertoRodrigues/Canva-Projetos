@@ -144,6 +144,7 @@ function animate() {
 
         const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
         
+        // end Game
         if (dist - enemy.radius - player.radius < 1) {
             // console.log('end game')
             cancelAnimationFrame(animationId)
@@ -152,12 +153,23 @@ function animate() {
         projectiles.forEach((projectile, projectileIndex) => {
             const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
 
+            // when projectiles touch enemy
             if (dist - enemy.radius - projectile.radius < 1) {
-                setTimeout(() => {
-                    // console.log('removido da tela')
-                    enemies.splice(index, 1)
-                    projectiles.splice(projectileIndex, 1)
-                }, 0)
+
+                if (enemy.radius - 10 > 10) {
+                    enemy.radius -= 10
+                    setTimeout(() => {
+                        // console.log('removido da tela')
+                        projectiles.splice(projectileIndex, 1)
+                    }, 0)
+
+                } else {
+                    setTimeout(() => {
+                        // console.log('removido da tela')
+                        enemies.splice(index, 1)
+                        projectiles.splice(projectileIndex, 1)
+                    }, 0)
+                }
             }
         })
     })
@@ -184,3 +196,6 @@ addEventListener('click', (event) => {
 // Chama no final do arquivo
 animate()
 spawnEnemies()
+
+// Encolher o inimigo quando acertar o projétil nele
+// 1:11:00
