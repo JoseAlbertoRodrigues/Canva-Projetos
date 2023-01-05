@@ -1,5 +1,5 @@
+// console.log(gsap)
 const canvas = document.querySelector('canvas')
-
 const c = canvas.getContext('2d')
 
 canvas.width = innerWidth
@@ -129,7 +129,7 @@ function animate() {
 
         // remove from edges of screen
         if (
-            projectile.x + projectile.radius < 0 || 
+            projectile.x + projectile.radius < 0 ||
             projectile.x - projectile.radius > canvas.width ||
             projectile.y + projectile.radius < 0 ||
             projectile.y - projectile.radius > canvas.height) {
@@ -155,9 +155,11 @@ function animate() {
 
             // when projectiles touch enemy
             if (dist - enemy.radius - projectile.radius < 1) {
-
-                if (enemy.radius - 10 > 10) {
-                    enemy.radius -= 10
+                if (enemy.radius - 10 > 5) {
+                    // enemy.radius -= 10
+                    gsap.to(enemy, {
+                        radius: enemy.radius - 10
+                    })
                     setTimeout(() => {
                         // console.log('removido da tela')
                         projectiles.splice(projectileIndex, 1)

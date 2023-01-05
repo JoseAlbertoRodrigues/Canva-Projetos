@@ -9,6 +9,7 @@
    OK - Detect collision on enemy / player hit
    OK - Remove off screen projectiles
    OK - Colorize game
+   
    OK - Shrink enemies on hit
     - Create particles explosion on hit
     - Add score
@@ -17,3 +18,5 @@
     - Add start game button
 
 # Ferramenta para animação, biblioteca gsap
+# gsap cloudflare
+# https://cdnjs.com/libraries/gsap
