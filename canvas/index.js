@@ -76,7 +76,7 @@ const x = canvas.width / 2
 const y = canvas.height / 2
 
 // const player = new Player(100, 100, 30, 'blue')
-const player = new Player(x, y, 30, 'blue')
+const player = new Player(x, y, 10, 'white')
 const projectiles = []
 const enemies = []
 
@@ -87,7 +87,7 @@ function spawnEnemies() {
     setInterval(() => {
         // console.log('go')
         // Obter tamanhos de inimigos aleatórios, que seja maior que 4
-        const radius = Math.random() * (30 - 4) + 4
+        const radius = Math.random() * (30 - 5) + 5
         let x
         let y
 
@@ -101,7 +101,7 @@ function spawnEnemies() {
             y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
         }
 
-        const color = 'green'
+        const color = `hsl(${Math.random() * 360}, 50%, 50%)`
 
         const angle = Math.atan2(
             canvas.height / 2 - y,
@@ -172,24 +172,15 @@ addEventListener('click', (event) => {
     )
 
     const velocity = {
-        x: Math.cos(angle),
-        y: Math.sin(angle)
+        x: Math.cos(angle) * 5,
+        y: Math.sin(angle) * 5
     }
 
     projectiles.push(
-        new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', velocity)
+        new Projectile(canvas.width / 2, canvas.height / 2, 5, 'white', velocity)
     )
 })
 
 // Chama no final do arquivo
 animate()
 spawnEnemies()
-
-// Remover os projéteis da tela quando ele ultrapassar a tela, ou seja, 
-// sair da tela.
-// precisamos ter a certeza de que uma vez que eles saiam da tela enquanto estão
-// não estão mais em nosso jogo, eles são removidos da nossa matriz e, na verdade,
-// não executamos nenhum cálculo neles, portanto, basicamente, estamos realizando
-// detecção de colisão, mais ainda quando nosso projétil colide com as bordas de nossa tela
-// remover dentro de nosso loop de projétil
-// 1:01:40 minutos de video
