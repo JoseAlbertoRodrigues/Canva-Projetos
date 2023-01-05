@@ -126,8 +126,20 @@ function animate() {
         projectile.update()
     })
 
-    enemies.forEach((enemy) => {
+    enemies.forEach((enemy, index) => {
         enemy.update()
+
+        projectiles.forEach((projectile, projectileIndex) => {
+            const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
+
+            if (dist - enemy.radius - projectile.radius < 1) {
+                setTimeout(() => {
+                    // console.log('removido da tela')
+                    enemies.splice(index, 1)
+                    projectiles.splice(projectileIndex, 1)
+                }, 0)
+            }
+        })
     })
 }
 
@@ -151,3 +163,7 @@ addEventListener('click', (event) => {
 // Chama no final do arquivo
 animate()
 spawnEnemies()
+
+// detectar a colisão sempre que um inimigo atingir um de nossos projéteis,
+// sempre que isso acontecer vamos remover o projétil e o inimigo da tela
+// 58 minutos de video
