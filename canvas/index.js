@@ -117,9 +117,10 @@ function spawnEnemies() {
     }, 1000)
 }
 
+let animationId
 // loop de animação
 function animate() {
-    requestAnimationFrame(animate)
+    animationId = requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
     player.draw()
     projectiles.forEach(projectile => {
@@ -128,6 +129,13 @@ function animate() {
 
     enemies.forEach((enemy, index) => {
         enemy.update()
+
+        const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y)
+        
+        if (dist - enemy.radius - player.radius < 1) {
+            // console.log('end game')
+            cancelAnimationFrame(animationId)
+        }
 
         projectiles.forEach((projectile, projectileIndex) => {
             const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
@@ -164,6 +172,6 @@ addEventListener('click', (event) => {
 animate()
 spawnEnemies()
 
-// detectar a colisão sempre que um inimigo atingir um de nossos projéteis,
-// sempre que isso acontecer vamos remover o projétil e o inimigo da tela
+// detectar a colisão sempre que um inimigo atingir um de nossos player,
+// sempre que isso acontecer vamos remover o inimigo da tela e pausar o jogo
 // 58 minutos de video
