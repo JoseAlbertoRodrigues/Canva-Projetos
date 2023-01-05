@@ -121,10 +121,22 @@ let animationId
 // loop de animação
 function animate() {
     animationId = requestAnimationFrame(animate)
-    c.clearRect(0, 0, canvas.width, canvas.height)
+    c.fillStyle = 'rgba(0, 0, 0, 0.1)'
+    c.fillRect(0, 0, canvas.width, canvas.height)
     player.draw()
-    projectiles.forEach(projectile => {
+    projectiles.forEach((projectile, index) => {
         projectile.update()
+
+        // remove from edges of screen
+        if (
+            projectile.x + projectile.radius < 0 || 
+            projectile.x - projectile.radius > canvas.width ||
+            projectile.y + projectile.radius < 0 ||
+            projectile.y - projectile.radius > canvas.height) {
+            setTimeout(() => {
+                projectiles.splice(index, 1)
+            }, 0)
+        }
     })
 
     enemies.forEach((enemy, index) => {
@@ -153,6 +165,7 @@ function animate() {
 
 addEventListener('click', (event) => {
     // const projectile = new Projectile(event.clientX, event.clientY, 5, 'red', null)
+    console.log(projectiles)
     const angle = Math.atan2(
         event.clientY - canvas.height / 2,
         event.clientX - canvas.width / 2
@@ -172,6 +185,11 @@ addEventListener('click', (event) => {
 animate()
 spawnEnemies()
 
-// detectar a colisão sempre que um inimigo atingir um de nossos player,
-// sempre que isso acontecer vamos remover o inimigo da tela e pausar o jogo
-// 58 minutos de video
+// Remover os projéteis da tela quando ele ultrapassar a tela, ou seja, 
+// sair da tela.
+// precisamos ter a certeza de que uma vez que eles saiam da tela enquanto estão
+// não estão mais em nosso jogo, eles são removidos da nossa matriz e, na verdade,
+// não executamos nenhum cálculo neles, portanto, basicamente, estamos realizando
+// detecção de colisão, mais ainda quando nosso projétil colide com as bordas de nossa tela
+// remover dentro de nosso loop de projétil
+// 1:01:40 minutos de video

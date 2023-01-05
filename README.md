@@ -7,7 +7,7 @@
    OK - Create enemies
    OK - Detect collision on enemy / projectile hit
    OK - Detect collision on enemy / player hit
-    - Remove off screen projectiles
+   OK - Remove off screen projectiles
     - Colorize game
     - Shrink enemies on hit
     - Create particles explosion on hit
