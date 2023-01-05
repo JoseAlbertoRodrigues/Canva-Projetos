@@ -9,7 +9,7 @@
    OK - Detect collision on enemy / player hit
    OK - Remove off screen projectiles
    OK - Colorize game
-    - Shrink enemies on hit
+   OK - Shrink enemies on hit
     - Create particles explosion on hit
     - Add score
     - Add game over UI
