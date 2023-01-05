@@ -41,6 +41,7 @@ class Projectile {
     }
 
     update() {
+        this.draw()
         this.x = this.x + this.velocity.x
         this.y = this.y + this.velocity.y
     }
@@ -54,16 +55,41 @@ const y = canvas.height / 2
 const player = new Player(x, y, 30, 'blue')
 player.draw()
 
+// const projectile = new Projectile(
+//     canvas.width / 2,
+//     canvas.height / 2,
+//     5,
+//     'red',
+//     {
+//         x: 1,
+//         y: 1
+//     }
+// )
+
+const projectiles = []
+
+// loop de animação
 function animate() {
     requestAnimationFrame(animate)
-    projectile.draw()
-    projectile.update()
+    projectiles.forEach(projectile => {
+        projectile.update()
+    })
 }
 
 addEventListener('click', (event) => {
     // const projectile = new Projectile(event.clientX, event.clientY, 5, 'red', null)
-    const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', {x: 1, y: 1})
-    projectile.draw()
+    const angle = Math.atan2(
+        event.clientY - canvas.height / 2, 
+        event.clientX - canvas.width / 2
+    )
+    
+    projectiles.push(
+        new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red',
+        {
+            x: angle,
+            y: angle
+        })
+    )
 })
 
 // Chama no final do arquivo
