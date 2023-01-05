@@ -53,7 +53,6 @@ const y = canvas.height / 2
 
 // const player = new Player(100, 100, 30, 'blue')
 const player = new Player(x, y, 30, 'blue')
-player.draw()
 
 // const projectile = new Projectile(
 //     canvas.width / 2,
@@ -71,6 +70,8 @@ const projectiles = []
 // loop de animação
 function animate() {
     requestAnimationFrame(animate)
+    c.clearRect(0, 0, canvas.width, canvas.height)
+    player.draw()
     projectiles.forEach(projectile => {
         projectile.update()
     })
@@ -79,16 +80,17 @@ function animate() {
 addEventListener('click', (event) => {
     // const projectile = new Projectile(event.clientX, event.clientY, 5, 'red', null)
     const angle = Math.atan2(
-        event.clientY - canvas.height / 2, 
+        event.clientY - canvas.height / 2,
         event.clientX - canvas.width / 2
     )
-    
+
+    const velocity = {
+        x: Math.cos(angle),
+        y: Math.sin(angle)
+    }
+
     projectiles.push(
-        new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red',
-        {
-            x: angle,
-            y: angle
-        })
+        new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', velocity)
     )
 })
 
