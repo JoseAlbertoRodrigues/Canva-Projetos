@@ -86,13 +86,34 @@ const enemies = []
 function spawnEnemies() {
     setInterval(() => {
         // console.log('go')
-        const x = 100
-        const y = 100
-        const radius = 30
+        // Obter tamanhos de inimigos aleatórios, que seja maior que 4
+        const radius = Math.random() * (30 - 4) + 4
+        let x
+        let y
+
+        if(Math.random() < 0.5) {
+            x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius
+            y = Math.random() * canvas.height
+            // const y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
+        } else {
+            // x = Math.random() < 0.5 ? 0 - radius : canvas.width + radius 
+            x = Math.random() * canvas.width
+            y = Math.random() < 0.5 ? 0 - radius : canvas.height + radius
+        }
+
         const color = 'green'
-        const velocity = { x: 1, y: 1}
+
+        const angle = Math.atan2(
+            canvas.height / 2 - y,
+            canvas.width / 2 - x
+        )
+    
+        const velocity = {
+            x: Math.cos(angle),
+            y: Math.sin(angle)
+        }
+
         enemies.push(new Enemy(x, y, radius, color, velocity))
-        console.log(enemies)
     }, 1000)
 }
 

@@ -4,7 +4,7 @@
 # BASIC GAME CHECKLIST:
    OK - Create a player
    OK - Shoot projectiles
-    - Create enemies
+   OK - Create enemies
     - Detect collision on enemy / projectile hit
     - Detect collision on enemy / player hit
     - Remove off screen projectiles
