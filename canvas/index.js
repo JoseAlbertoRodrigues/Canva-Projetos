@@ -5,6 +5,8 @@ const c = canvas.getContext('2d')
 canvas.width = innerWidth
 canvas.height = innerHeight
 
+const scoreEl = document.querySelector('#scoreEl')
+
 // Construtor do Jogador
 class Player {
     constructor(x, y, radius, color) {
@@ -152,6 +154,7 @@ function spawnEnemies() {
 }
 
 let animationId
+let score = 0
 // loop de animação
 function animate() {
     animationId = requestAnimationFrame(animate)
@@ -205,13 +208,17 @@ function animate() {
                             projectile.y,
                             Math.random() * 2,
                             enemy.color, {
-                            x: (Math.random() - 0.5) * (Math.random() * 8),
-                            y: (Math.random() - 0.5) * (Math.random() * 8)
+                            x: (Math.random() - 0.5) * (Math.random() * 6),
+                            y: (Math.random() - 0.5) * (Math.random() * 6)
                         })
                     )
                 }
 
                 if (enemy.radius - 10 > 5) {
+                    // increase our score
+                    score += 100
+                    scoreEl.innerHTML = score
+
                     // enemy.radius -= 10
                     gsap.to(enemy, {
                         radius: enemy.radius - 10
@@ -220,8 +227,11 @@ function animate() {
                         // console.log('removido da tela')
                         projectiles.splice(projectileIndex, 1)
                     }, 0)
-
                 } else {
+                    // remove from scene altogther
+                    // increase our score
+                    score += 250
+                    scoreEl.innerHTML = score
                     setTimeout(() => {
                         // console.log('removido da tela')
                         enemies.splice(index, 1)
@@ -256,4 +266,4 @@ animate()
 spawnEnemies()
 
 // Encolher o inimigo quando acertar o projétil nele
-// 1:18:00
+// 1:29:27

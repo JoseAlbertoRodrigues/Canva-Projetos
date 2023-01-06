@@ -12,7 +12,7 @@
 
    OK - Shrink enemies on hit
    OK - Create particles explosion on hit
-    - Add score
+   OK - Add score
     - Add game over UI
     - Add restart button
     - Add start game button
@@ -20,3 +20,4 @@
 # Ferramenta para animação, biblioteca gsap
 # gsap cloudflare
 # https://cdnjs.com/libraries/gsap
+# https://cdn.tailwindcss.com
