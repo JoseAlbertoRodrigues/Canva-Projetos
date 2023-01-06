@@ -14,7 +14,7 @@
    OK - Create particles explosion on hit
    OK - Add score
    OK - Add start game button
-    - Add game over UI
+   OK - Add game over UI
     - Add restart button
 
 # Ferramenta para animação, biblioteca gsap

@@ -8,6 +8,7 @@ canvas.height = innerHeight
 const scoreEl = document.querySelector('#scoreEl')
 const startGameBtn = document.querySelector('#startGameBtn')
 const modalEl = document.querySelector('#modalEl')
+const bigScoreEl = document.querySelector('#bigScoreEl')
 
 // Construtor do Jogador
 class Player {
@@ -195,6 +196,8 @@ function animate() {
         if (dist - enemy.radius - player.radius < 1) {
             // console.log('end game')
             cancelAnimationFrame(animationId)
+            modalEl.style.display = 'flex' // mostrar o botão do start game quando perder
+            bigScoreEl.innerHTML = score
         }
 
         projectiles.forEach((projectile, projectileIndex) => {
