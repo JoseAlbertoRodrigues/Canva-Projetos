@@ -6,6 +6,8 @@ canvas.width = innerWidth
 canvas.height = innerHeight
 
 const scoreEl = document.querySelector('#scoreEl')
+const startGameBtn = document.querySelector('#startGameBtn')
+const modalEl = document.querySelector('#modalEl')
 
 // Construtor do Jogador
 class Player {
@@ -261,9 +263,13 @@ addEventListener('click', (event) => {
     )
 })
 
-// Chama no final do arquivo
-animate()
-spawnEnemies()
+startGameBtn.addEventListener('click', () => {
+    // console.log('go')
+    // Chama no final do arquivo
+    animate()
+    spawnEnemies()
+    modalEl.style.display = 'none'
+})
 
 // Encolher o inimigo quando acertar o projétil nele
 // 1:29:27
