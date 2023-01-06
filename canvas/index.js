@@ -114,12 +114,23 @@ const x = canvas.width / 2
 const y = canvas.height / 2
 
 // const player = new Player(100, 100, 30, 'blue')
-const player = new Player(x, y, 10, 'white')
-const projectiles = []
-const enemies = []
-const particles = []
+let player = new Player(x, y, 10, 'white')
+let projectiles = []
+let enemies = []
+let particles = []
 
 // const projectile = new Projectile(canvas.width / 2, canvas.height / 2, 5, 'red', { x: 1, y: 1 })
+
+function init() {
+    // não podemos usar let duas vezes na mesma variável
+    player = new Player(x, y, 10, 'white')
+    projectiles = []
+    enemies = []
+    particles = []
+    score = 0
+    scoreEl.innerHTML = score
+    bigScoreEl.innerHTML = score
+}
 
 // função para gerar inimigos
 function spawnEnemies() {
@@ -269,6 +280,7 @@ addEventListener('click', (event) => {
 startGameBtn.addEventListener('click', () => {
     // console.log('go')
     // Chama no final do arquivo
+    init()
     animate()
     spawnEnemies()
     modalEl.style.display = 'none'
