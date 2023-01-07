@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animação - Fazer o quadrado se Mover</title>
+
+    <style>
+        canvas {
+            display: flex;
+            margin: auto;
+            border: 1px solid black;
+        }
+    </style>
+
+    <script>
+        
+        let px = 0
+        let anima
+
+        function desenhar() {
+            let canvas = document.querySelector('canvas')
+            let c = canvas.getContext('2d')
+            c.clearRect(0, 0, canvas.width, canvas.height)
+            anima = requestAnimationFrame(desenhar)
+            c.fillStyle = 'red'
+            c.fillRect(px, 0, 50, 50)
+
+            px++
+        }
+
+    </script>
+</head>
+<body onload="desenhar()">
+    <canvas id="desenho" width="500" height="500" ></canvas>
+</body>
+</html>
