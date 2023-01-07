@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animação - Fazer o quadrado se Mover</title>
+
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="desenho" width="500" height="500" ></canvas>
+
+    <script>
+        let canvas = document.querySelector('canvas')
+        let c = canvas.getContext('2d')
+
+        let canvasW = 500
+        let canvasH = 500
+        
+        let posX = 0
+        let posY = 10
+        let quadW = 50
+        let quadH = 50
+
+        let speed = 1
+        let anima
+
+        function desenhar() {
+            c.clearRect(0, 0, canvas.width, canvas.height)
+            c.fillStyle = 'red'
+            c.fillRect(posX, posY, quadW, quadH)
+
+            /*
+            if(posX + quadW > canvasW) {
+                speed = -2
+                //px--
+            } if (posX < 0) {
+                speed = 2
+            }
+            */
+            
+            // OU POSSO FAZER ASSIM
+            // + COM - = - ; - COM - = +
+            // se posX for 2 ele passa a valer -2
+            if((posX + quadW > canvasW) || (posX < 0)) {
+                speed *= -1
+            }
+
+            posX += speed
+            anima = requestAnimationFrame(desenhar)
+        }
+
+        desenhar()
+    </script>
+</body>
+</html>
