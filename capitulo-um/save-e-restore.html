@@ -6,8 +6,9 @@
 </head>
 
 <body>
-   <canvas id="meu_canvas" width="200" height="200"></canvas>
+   <!-- <canvas id="meu_canvas" width="200" height="200"></canvas> -->
    <script>
+      /*
       // Canvas e contexto
       var canvas = document.getElementById('meu_canvas');
       var context = canvas.getContext('2d');
@@ -28,7 +29,34 @@
       
       // Voltou para o verde!
       context.fillRect(150, 50, 25, 25);      
+      */
    </script>
+
+   <h1>Save and restore</h1>
+   <canvas id="meu_canvas" width="900" height="600"></canvas>
+   <script>
+      // var canvas = document.querySelector('canvas')
+      let canvas = document.querySelector('#meu_canvas')
+      let c = canvas.getContext('2d') 
+
+      // quadrado verde
+      c.fillStyle = 'green'
+      c.fillRect(50, 100, 200, 200)
+
+      // salvamos
+      c.save()
+
+      c.fillStyle = 'purple'
+      c.fillRect(300, 100, 200, 200)
+      
+      // volta para o nivel anterior
+      c.restore()
+
+      // voltou para o verde
+      c.fillRect(550, 100, 200, 200)
+
+   </script>
+
 </body>
 
 </html>
