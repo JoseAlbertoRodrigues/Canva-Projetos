@@ -1,0 +1,67 @@
+<!-- Feito como base no livro HTML5 Canvas e JavaScript -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request animation Frame</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+
+    <script>
+        const canvas = document.querySelector('canvas')
+        const c = canvas.getContext('2d')
+
+        canvas.width = innerWidth
+        canvas.height = innerHeight
+
+        class Bola {
+            constructor(x, y, radius, color, velocity) {
+                this.x = x
+                this.y = y
+                this.radius = radius
+                this.color = color
+                this.velocity = velocity
+            }
+
+            draw() {
+                c.beginPath()
+                c.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
+                c.fillStyle = this.color
+                c.fill()
+            }
+
+            update() {
+                this.draw()
+                this.x += this.velocity.x
+                this.y += this.velocity.y
+            }
+        }
+
+        let x = 100
+        let y = 200
+
+        let bola = new Bola(x, y, 50, 'purple')
+
+        let animationId
+        function animate() {
+            animationId = requestAnimationFrame(animate)
+            c.fillStyle = 'rgba(255, 255, 255, 0.1)'
+            c.fillRect(0, 0, canvas.width, canvas.height)
+            bola.draw()
+        }
+
+        animate()
+    </script>
+</body>
+</html>
