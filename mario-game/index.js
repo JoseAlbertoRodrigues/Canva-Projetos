@@ -61,7 +61,7 @@ class Platform {
 
 const player = new Player()
 // const platform = new Platform()
-const platforms = [new Platform({x:200, y:200}), new P  latform({x:600, y:300})] // usar esse agora
+const platforms = [new Platform({x:200, y:200}), new Platform({x:600, y:300}), new Platform({x:1000, y:400})] // usar esse agora
 
 const keys = {
     right: {
@@ -71,6 +71,8 @@ const keys = {
         pressed: false
     }
 }
+
+let scrollOffset = 0
 
 function animate() {
     requestAnimationFrame(animate)
@@ -89,10 +91,12 @@ function animate() {
         player.velocity.x = 0
         
         if(keys.right.pressed) {
+            scrollOffset += 5
             platforms.forEach(platform => {
                 platform.position.x -= 5
             })
         } else if(keys.left.pressed) {
+            scrollOffset -= 5
             platforms.forEach(platform => {
                 platform.position.x += 5
             })
@@ -108,6 +112,11 @@ function animate() {
             player.velocity.y = 0
         }
     })
+
+    // console.log(scrollOffset) testar se a rolagem passou de um determinado valor
+    // if (scrollOffset > 2000) {
+    //     console.log('You Win! Parabêns!')
+    // }
 }
 
 animate()
