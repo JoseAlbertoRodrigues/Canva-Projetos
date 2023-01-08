@@ -1,14 +1,19 @@
 // Plataforma - platform
-// import platform from './img/platform.png'
-// console.log(GrassBlock)
+// import platform from '../img/platform.png'
+import platform from '../img/11.png'
+
+// console.log(platform)
 
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
-canvas.width = innerWidth
-canvas.height = innerHeight
+// canvas.width = innerWidth
+// canvas.height = innerHeight
+canvas.width = 1024
+canvas.height = 576
 
-const gravity = 0.5
+// const gravity = 1.5
+const gravity = 0.8
 class Player {
     constructor () {
         this.position = {
@@ -44,28 +49,47 @@ class Player {
 }
 
 class Platform {
-    constructor({x, y}) {
+    constructor({x, y, image}) {
         this.position = {
             x,
             y
         }
-        
-        this.width = 200
-        this.height = 20
+
+        this.image = image
+        this.width = image.width
+        this.height = image.height
+
     }
 
     draw() {
+      c.drawImage(this.image, this.position.x, this.position.y)
+        // Não vou usar mais esse
         // c.beginPath()
-        c.fillStyle = 'blue'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // c.fillStyle = 'blue'
+        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
         // c.fill()
 
     }
 }
 
+// imagem da plataforma
+const image = new Image()
+image.src = platform
+console.log(image)
+
 const player = new Player()
 // const platform = new Platform()
-const platforms = [new Platform({x:200, y:200}), new Platform({x:600, y:300}), new Platform({x:1000, y:400})] // usar esse agora
+
+const platforms = [
+  new Platform({
+    x: -1,
+    y: 470,
+    image
+  }),
+  new Platform({x: image.width - 3, y:470, image}),
+  new Platform({x: 400, y:470, image}),
+  new Platform({x: 550, y:470, image})
+]
 
 const keys = {
     right: {
@@ -80,11 +104,15 @@ let scrollOffset = 0
 
 function animate() {
     requestAnimationFrame(animate)
-    c.clearRect(0, 0, canvas.width, canvas.height)
-    player.update()
+    // c.clearRect(0, 0, canvas.width, canvas.height) 
+    //agora vou usar o fillStyle e fillRect, porque coloquei o background-color: black
+    c.fillStyle = 'white'
+    c.fillRect(0, 0, canvas.width, canvas.height) 
+    
     platforms.forEach(platform => {
-        platform.draw()
+      platform.draw()
     })
+    player.update()
 
     // key Pressed
     if (keys.right.pressed && player.position.x < 400) {
