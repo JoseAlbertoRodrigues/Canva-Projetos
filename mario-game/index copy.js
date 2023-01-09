@@ -44,9 +44,11 @@ class Player {
 
         if(this.position.y + this.height + this.velocity.y <= canvas.height) {
             this.velocity.y += gravity
-        } else {
-            this.velocity.y = 0
-        }
+        } 
+        // aqui vou remover para quando o personagem cair da plataforma, ele sair do cenario, para perder vida ou game over
+        // else {
+        //     this.velocity.y = 0
+        // }
     }
 }
 
@@ -87,12 +89,12 @@ class GenericObject {
     }
 
     draw() {
-      c.drawImage(this.image, this.position.x, this.position.y)
+        c.beginPath()
+        c.drawImage(this.image, this.position.x, this.position.y)
         // Não vou usar mais esse
-        // c.beginPath()
         // c.fillStyle = 'blue'
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        // c.fill()
+        c.fill()
     }
 }
 
@@ -103,25 +105,26 @@ function createImage(imageSrc) {
     return image
 }
 
-const platformImage = createImage(platform)
+let platformImage = createImage(platform)
 
 // console.log(image)
 
-const player = new Player()
+let player = new Player()
 // const platform = new Platform()
 
-const platforms = [
-  new Platform({
+let platforms = [
+new Platform({
     x: -1,
     y: 470,
     image: platformImage
-  }),
-  new Platform({x: platformImage.width - 3, y:470, image: platformImage}),
+}),
+new Platform({x: platformImage.width - 3, y:470, image: platformImage}),
+new Platform({x: platformImage.width * 4 + 100, y:470, image: platformImage}),
 //   new Platform({x: 400, y:470, image}),
 //   new Platform({x: 550, y:470, image:platformImage})
 ]
 
-const genericObjects = [
+let genericObjects = [
     new GenericObject({
         x: -1,
         y: -1,
@@ -142,8 +145,44 @@ const keys = {
         pressed: false
     }
 }
-
 let scrollOffset = 0
+
+function init() {
+
+    platformImage = createImage(platform)
+
+    // console.log(image)
+
+    player = new Player()
+    // const platform = new Platform()
+
+    platforms = [
+    new Platform({
+        x: -1,
+        y: 470,
+        image: platformImage
+    }),
+    new Platform({x: platformImage.width - 3, y:470, image: platformImage}),
+    new Platform({x: platformImage.width * 2 + 100, y:470, image: platformImage}),
+    //   new Platform({x: 400, y:470, image}),
+    //   new Platform({x: 550, y:470, image:platformImage})
+    ]
+
+    genericObjects = [
+        new GenericObject({
+            x: -1,
+            y: -1,
+            image:  createImage(background)
+        }),
+        new GenericObject({
+            x: -1,
+            y: -1,
+            image:  createImage(hills)
+        })
+    ]
+    scrollOffset = 0
+}
+
 
 function animate() {
     requestAnimationFrame(animate)
@@ -199,9 +238,16 @@ function animate() {
     })
 
     // console.log(scrollOffset) testar se a rolagem passou de um determinado valor
-    // if (scrollOffset > 2000) {
-    //     console.log('You Win! Parabêns!')
-    // }
+    // win condition
+    if (scrollOffset > 2000) {
+        console.log('You Win! Parabêns!')
+    }
+
+    // lose condition
+    if (player.position.y > canvas.height) {
+        // console.log('You lose!, você perdeu')
+        init()
+    }
 }
 
 animate()
