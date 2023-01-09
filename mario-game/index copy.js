@@ -1,6 +1,8 @@
 // Plataforma - platform
 // import platform from '../img/platform.png'
-import platform from '../img/11.png'
+import platform from '../img/platform-one.png'
+import hills from '../img/11.png'
+import background from '../img/background.png'
 
 // console.log(platform)
 
@@ -68,14 +70,42 @@ class Platform {
         // c.fillStyle = 'blue'
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
         // c.fill()
-
     }
 }
 
-// imagem da plataforma
-const image = new Image()
-image.src = platform
-console.log(image)
+class GenericObject {
+    constructor({x, y, image}) {
+        this.position = {
+            x,
+            y
+        }
+
+        this.image = image
+        this.width = image.width
+        this.height = image.height
+
+    }
+
+    draw() {
+      c.drawImage(this.image, this.position.x, this.position.y)
+        // Não vou usar mais esse
+        // c.beginPath()
+        // c.fillStyle = 'blue'
+        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // c.fill()
+    }
+}
+
+function createImage(imageSrc) {
+    // imagem da plataforma
+    const image = new Image()
+    image.src = imageSrc
+    return image
+}
+
+const platformImage = createImage(platform)
+
+// console.log(image)
 
 const player = new Player()
 // const platform = new Platform()
@@ -84,11 +114,24 @@ const platforms = [
   new Platform({
     x: -1,
     y: 470,
-    image
+    image: platformImage
   }),
-  new Platform({x: image.width - 3, y:470, image}),
-  new Platform({x: 400, y:470, image}),
-  new Platform({x: 550, y:470, image})
+  new Platform({x: platformImage.width - 3, y:470, image: platformImage}),
+//   new Platform({x: 400, y:470, image}),
+//   new Platform({x: 550, y:470, image:platformImage})
+]
+
+const genericObjects = [
+    new GenericObject({
+        x: -1,
+        y: -1,
+        image:  createImage(background)
+    }),
+    new GenericObject({
+        x: -1,
+        y: -1,
+        image:  createImage(hills)
+    })
 ]
 
 const keys = {
@@ -104,12 +147,16 @@ let scrollOffset = 0
 
 function animate() {
     requestAnimationFrame(animate)
-    // c.clearRect(0, 0, canvas.width, canvas.height) 
+    // c.clearRect(0, 0, canvas.width, canvas.height)
     //agora vou usar o fillStyle e fillRect, porque coloquei o background-color: black
     c.fillStyle = 'white'
-    c.fillRect(0, 0, canvas.width, canvas.height) 
+    c.fillRect(0, 0, canvas.width, canvas.height)
+
+    genericObjects.forEach((genericObject) => {
+        genericObject.draw()
+    })
     
-    platforms.forEach(platform => {
+    platforms.forEach((platform) => {
       platform.draw()
     })
     player.update()
@@ -121,22 +168,28 @@ function animate() {
         player.velocity.x = -5
     } else {
         player.velocity.x = 0
-        
+
         if(keys.right.pressed) {
             scrollOffset += 5
-            platforms.forEach(platform => {
+            platforms.forEach((platform) => {
                 platform.position.x -= 5
+            })
+            genericObjects.forEach((genericObject) => {
+                genericObject.position.x -= 5
             })
         } else if(keys.left.pressed) {
             scrollOffset -= 5
-            platforms.forEach(platform => {
+            platforms.forEach((platform) => {
                 platform.position.x += 5
+            })
+            genericObjects.forEach((genericObject) => {
+                genericObject.position.x += 5
             })
         }
     }
 
     // platform collision detection
-    platforms.forEach(platform => {
+    platforms.forEach((platform) => {
         if (player.position.y + player.height <= platform.position.y &&
             player.position.y + player.height + player.velocity.y >= platform.position.y &&
             player.position.x + player.width >= platform.position.x &&
