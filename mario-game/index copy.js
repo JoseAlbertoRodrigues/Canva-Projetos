@@ -3,6 +3,7 @@
 import platform from '../img/platform-one.png'
 import hills from '../img/11.png'
 import background from '../img/background.png'
+import platformSmallTall from '../img/platformSmallTall.png'
 
 // console.log(platform)
 
@@ -15,9 +16,10 @@ canvas.width = 1024
 canvas.height = 576
 
 // const gravity = 1.5
-const gravity = 0.8
+const gravity = 1.5
 class Player {
     constructor () {
+        this.speed = 10
         this.position = {
             x: 100,
             y: 100
@@ -66,12 +68,12 @@ class Platform {
     }
 
     draw() {
-      c.drawImage(this.image, this.position.x, this.position.y)
+        c.beginPath()
+        c.drawImage(this.image, this.position.x, this.position.y)
         // Não vou usar mais esse
-        // c.beginPath()
         // c.fillStyle = 'blue'
         // c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        // c.fill()
+        c.fill()
     }
 }
 
@@ -85,7 +87,6 @@ class GenericObject {
         this.image = image
         this.width = image.width
         this.height = image.height
-
     }
 
     draw() {
@@ -106,6 +107,7 @@ function createImage(imageSrc) {
 }
 
 let platformImage = createImage(platform)
+let platformSmallTallImage = createImage(platformSmallTall)
 
 // console.log(image)
 
@@ -113,28 +115,16 @@ let player = new Player()
 // const platform = new Platform()
 
 let platforms = [
-new Platform({
-    x: -1,
-    y: 470,
-    image: platformImage
-}),
-new Platform({x: platformImage.width - 3, y:470, image: platformImage}),
-new Platform({x: platformImage.width * 4 + 100, y:470, image: platformImage}),
+// new Platform({ x: -1, y: 470, image: platformImage }),
+// new Platform({x: platformImage.width - 3, y:470, image: platformImage}),
+// new Platform({x: platformImage.width * 4 + 100, y:470, image: platformImage}),
 //   new Platform({x: 400, y:470, image}),
 //   new Platform({x: 550, y:470, image:platformImage})
 ]
 
 let genericObjects = [
-    new GenericObject({
-        x: -1,
-        y: -1,
-        image:  createImage(background)
-    }),
-    new GenericObject({
-        x: -1,
-        y: -1,
-        image:  createImage(hills)
-    })
+    // new GenericObject({ x: -1, y: -1, image:  createImage(background) }),
+    // new GenericObject({ x: -1, y: -1, image: createImage(hills) })
 ]
 
 const keys = {
@@ -150,13 +140,15 @@ let scrollOffset = 0
 function init() {
 
     platformImage = createImage(platform)
-
     // console.log(image)
 
     player = new Player()
     // const platform = new Platform()
 
     platforms = [
+        new Platform({
+            x: platformImage.width * 4 + 300 - 2 + platformImage.width - platformSmallTallImage.width, y:420, image: createImage(platformSmallTall)}),
+        // new Platform({x: platformImage.width * 3 + 300, y:270, image: createImage(platformSmallTall)})
     new Platform({
         x: -1,
         y: 470,
@@ -164,6 +156,9 @@ function init() {
     }),
     new Platform({x: platformImage.width - 3, y:470, image: platformImage}),
     new Platform({x: platformImage.width * 2 + 100, y:470, image: platformImage}),
+    new Platform({x: platformImage.width * 3 + 300, y:470, image: platformImage}),
+    new Platform({x: platformImage.width * 4 + 300 - 2, y:470, image: platformImage}), // quado ouver imenda na plataforma
+    new Platform({x: platformImage.width * 5 + 700 - 2, y:470, image: platformImage})
     //   new Platform({x: 400, y:470, image}),
     //   new Platform({x: 550, y:470, image:platformImage})
     ]
@@ -202,27 +197,27 @@ function animate() {
 
     // key Pressed
     if (keys.right.pressed && player.position.x < 400) {
-        player.velocity.x = 5
+        player.velocity.x = player.speed
     } else if (keys.left.pressed && player.position.x > 100) {
-        player.velocity.x = -5
+        player.velocity.x = -player.speed
     } else {
         player.velocity.x = 0
 
         if(keys.right.pressed) {
-            scrollOffset += 5
+            scrollOffset += player.speed
             platforms.forEach((platform) => {
-                platform.position.x -= 5
+                platform.position.x -= player.speed
             })
             genericObjects.forEach((genericObject) => {
-                genericObject.position.x -= 5
+                genericObject.position.x -= player.speed * .66
             })
         } else if(keys.left.pressed) {
-            scrollOffset -= 5
+            scrollOffset -= player.speed
             platforms.forEach((platform) => {
-                platform.position.x += 5
+                platform.position.x += player.speed
             })
             genericObjects.forEach((genericObject) => {
-                genericObject.position.x += 5
+                genericObject.position.x += player.speed * .66
             })
         }
     }
@@ -239,7 +234,7 @@ function animate() {
 
     // console.log(scrollOffset) testar se a rolagem passou de um determinado valor
     // win condition
-    if (scrollOffset > 2000) {
+    if (scrollOffset > platformImage.width * 5 + 300 - 2) {
         console.log('You Win! Parabêns!')
     }
 
@@ -250,6 +245,7 @@ function animate() {
     }
 }
 
+init()
 animate()
 
 // {keyCode} Pegar uma propriedade especifica do objeto event
@@ -270,7 +266,7 @@ addEventListener('keydown', ({key}) => {
         case 'w':
             console.log('up')
             // empurrar para cima sinal de -
-            player.velocity.y -= 10
+            player.velocity.y -= 25
             break
     }
     console.log(keys.right.pressed)
@@ -294,7 +290,7 @@ addEventListener('keyup', ({key}) => {
         case 'w':
             console.log('up')
             // empurrar para cima sinal de -
-            player.velocity.y -= 10
+            // player.velocity.y -= 10
             break
     }
     console.log(keys.right.pressed)
