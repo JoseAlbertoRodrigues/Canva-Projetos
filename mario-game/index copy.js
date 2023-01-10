@@ -5,6 +5,11 @@ import hills from '../img/11.png'
 import background from '../img/background.png'
 import platformSmallTall from '../img/platformSmallTall.png'
 
+import spriteRunLeft from '../img/spriteRunLeft.png'
+import spriteRunRight from '../img/spriteRunRight.png'
+import spriteStandLeft from '../img/spriteStandLeft.png'
+import spriteStandRight from '../img/spriteStandRight.png'
+
 // console.log(platform)
 
 const canvas = document.querySelector('canvas')
@@ -28,25 +33,75 @@ class Player {
             x: 0,
             y: 0
         }
-        this.width = 30
-        this.height = 30
+        this.width = 70
+        this.height = 70
+
+        this.image = createImage(spriteStandRight)
+        this.frames = 0
+        this.sprites = {
+            stand: {
+                right: createImage(spriteStandRight),
+                left: createImage(spriteStandLeft),
+                cropWidth: 177,
+                width: 66
+            },
+            run: {
+                right: createImage(spriteRunRight),
+                left: createImage(spriteRunLeft),
+                cropWidth: 341,
+                width: 127.875
+            }
+        }
+
+        this.currentSprite = this.sprite.stand.right
+        this.currentCropWidth = 177
     }
 
     draw() {
-        c.beginPath()
-        c.fillStyle ='red'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
-        c.fill()
+        // c.beginPath()
+        // c.fillStyle ='red'
+        // c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        // c.fill()
+
+        // c.drawImage(
+        //     this.image,
+        //     this.position.x,
+        //     this.position.y,
+        //     this.width,
+        //     this.height)
+
+        // dimensão da imagem 10620x400 que ele usou com 60 personagem, fica 10620 / 60 = 177
+        c.drawImage(
+            this.currentSprite, // this.image,
+            this.currentCropWidth * this.frames, // 177 * this.frame, // 0,
+            0,
+            this.currentCropWidth, // 177, // 177 * frame, // largura
+            400, // altura
+            this.position.x,
+            this.position.y,
+            this.width,
+            this.height)
     }
 
     update() {
+        this.frames++
         this.draw()
+        if (this.frames > 59 &&
+            (this.currentSprite === this.sprites.stand.right ||
+            this.currentSprite === this.sprite.stand.left)) {
+            this.frames = 0
+        } else if (this.frames > 29 &&
+            (this.currentSprite === this.sprites.run.right ||
+            this.currentSprite === this.sprite.run.left)) {
+            this.frames = 0
+        }
+
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
 
         if(this.position.y + this.height + this.velocity.y <= canvas.height) {
             this.velocity.y += gravity
-        } 
+        }
         // aqui vou remover para quando o personagem cair da plataforma, ele sair do cenario, para perder vida ou game over
         // else {
         //     this.velocity.y = 0
@@ -126,6 +181,8 @@ let genericObjects = [
     // new GenericObject({ x: -1, y: -1, image:  createImage(background) }),
     // new GenericObject({ x: -1, y: -1, image: createImage(hills) })
 ]
+
+let lastKey
 
 const keys = {
     right: {
@@ -232,6 +289,29 @@ function animate() {
         }
     })
 
+    // sprite switching
+    if (keys.right.pressed && lastKey === 'right' && player.currentSprite !== player.sprite.run.right) {
+        player.frames = 1
+        player.currentSprite = player.sprite.run.right
+        player.currentCropWidth = player.sprite.run.cropWidth
+        player.width = player.sprite.run.width
+    } else if (keys.left.pressed && lastKey === 'left' && player.currentSprite !== player.sprite.run.left) {
+        // player.frame = 60 não tem essa linha
+        player.currentSprite = player.sprite.run.left
+        player.currentCropWidth = player.sprite.run.cropWidth
+        player.width = player.sprite.run.width
+    } else if (!keys.left.pressed && lastKey === 'left' && player.currentSprite !== player.sprite.stand.left) {
+        // player.frame = 60 não tem essa linha
+        player.currentSprite = player.sprite.stand.left
+        player.currentCropWidth = player.sprite.stand.cropWidth
+        player.width = player.sprite.stand.width
+    } else if (!keys.right.pressed && lastKey === 'right' && player.currentSprite !== player.sprite.stand.right) {
+        // player.frame = 60 não tem essa linha
+        player.currentSprite = player.sprite.stand.right
+        player.currentCropWidth = player.sprite.stand.cropWidth
+        player.width = player.sprite.stand.width
+    }
+
     // console.log(scrollOffset) testar se a rolagem passou de um determinado valor
     // win condition
     if (scrollOffset > platformImage.width * 5 + 300 - 2) {
@@ -255,6 +335,10 @@ addEventListener('keydown', ({key}) => {
         case 'a':
             console.log('left')
             keys.left.pressed = true
+            lastKey = 'left'
+            // player.currentSprite = player.sprite.run.left
+            // player.currentCropWidth = player.sprite.run.cropWidth
+            // player.width = player.sprite.run.width
             break
         case 's':
             console.log('down')
@@ -262,6 +346,10 @@ addEventListener('keydown', ({key}) => {
         case 'd':
             console.log('right')
             keys.right.pressed = true
+            lastKey = 'right'
+            // player.currentSprite = player.sprite.run.right
+            // player.currentCropWidth = player.sprite.run.cropWidth
+            // player.width = player.sprite.run.width
             break
         case 'w':
             console.log('up')
@@ -286,6 +374,9 @@ addEventListener('keyup', ({key}) => {
         case 'd':
             console.log('right')
             keys.right.pressed = false
+            // player.currentSprite = player.sprite.stand.right
+            // player.currentCropWidth = player.sprite.stand.cropWidth
+            // player.width = player.sprite.stand.width
             break
         case 'w':
             console.log('up')
