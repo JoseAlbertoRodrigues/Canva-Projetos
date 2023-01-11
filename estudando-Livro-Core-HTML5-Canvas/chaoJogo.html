@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animação - Criando o chão movendo</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+
+    <script>
+        const canvas = document.querySelector('canvas')
+        const c = canvas.getContext('2d')
+
+        canvas.width = innerWidth
+        canvas.height = innerHeight
+
+        let grassBlock = new Image()
+        grassBlock.src = '../capitulo-um/img/grassBlock.png'
+
+        class Chao {
+            constructor(ctx, img) {
+                this.ctx = ctx
+                this.img = img
+                this.x = 0
+                this.y = 350
+                this.w = 64
+                this.h = 64
+            }
+
+            draw() {
+                c.beginPath()
+                let c = this.ctx
+                let img = this.img
+                this.c.drawImage(img, this.x, this.y)
+                c.fill()
+            }
+        }
+
+        let chao = new Chao(c, grassBlock)
+
+
+        let animationId
+        function animate() {
+            animationId = requestAnimationFrame(animate)
+            c.fillStyle = 'rgba(0, 0, 0, 0.1)'
+            c.fillRect(0, 0, canvas.width, canvas.height)
+            //chao.draw()
+        }
+
+        animate()
+
+        /*
+        let grassBlock = new Image()
+        grassBlock.src = '../capitulo-um/img/grassBlock.png'
+
+        grassBlock.onload = function() {
+            let x = 0
+
+            for(let i = 1; i < 2; i++) {
+                c.drawImage(grassBlock, x, 300, 64, 64)
+            }
+        }
+        */
+    </script>
+    
+    <script type="desativado">
+        let background = new Image()
+        background.src = '../mario-game/img/background-1.jpg'
+        background.onload = function() {
+            let x = 0
+            for(let i = 1; i < 100; i++) {
+                c.drawImage(grassBlock, x, y)
+            }
+        }
+
+        let canvas = document.querySelector('canvas')
+        let c = canvas.getContext('2d')
+
+        let canvasW = 500
+        let canvasH = 500
+
+        let posX = 0
+        let posY = 10
+        let quadW = 50
+        let quadH = 50
+
+        let speed = 1
+        let anima
+
+        function desenhar() {
+            c.clearRect(0, 0, canvas.width, canvas.height)
+            c.fillStyle = 'red'
+            c.fillRect(posX, posY, quadW, quadH)
+
+            /*
+            if(posX + quadW > canvasW) {
+                speed = -2
+                //px--
+            } if (posX < 0) {
+                speed = 2
+            }
+            */
+            
+            // OU POSSO FAZER ASSIM
+            // + COM - = - ; - COM - = +
+            // se posX for 2 ele passa a valer -2
+            if((posX + quadW > canvasW) || (posX < 0)) {
+                speed *= -1
+            }
+
+            posX += speed
+            anima = requestAnimationFrame(desenhar)
+        }
+
+        desenhar()
+    </script>
+
+</body>
+</html>
