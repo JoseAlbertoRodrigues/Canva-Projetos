@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <canvas></canvas>
+
+    <script>
+        const canvas = document.querySelector('canvas')
+        const c = canvas.getContext('2d')
+
+        canvas.width = innerWidth
+        canvas.height = innerHeight
+
+        class DrawMole {
+            constructor (moleX, moleY)  {
+                this.moleX = moleX
+                this.moleY = moleY
+            }
+
+            draw() {
+                // FACE
+                c.beginPath()
+                c.fillStyle = 'rgb(125, 93, 43)'
+                c.arc(this.moleX, this.moleY, 60, 0, Math.PI * 2)
+                c.fill()
+                c.closePath()
+
+                // PARTE DA BOCHECHA
+                c.beginPath()
+                c.fillStyle = 'rgb(255, 237, 209)'
+                c.arc(this.moleX, this.moleY + 10, 28, 0, Math.PI * 2)
+                c.fill()
+                c.closePath()
+
+                // EYES LEFT
+                c.beginPath()
+                c.fillStyle = 'rgb(0, 0, 0)'
+                c.arc(this.moleX - 20, this.moleY - 30, 10, 0, Math.PI * 2)
+                c.fill()
+                c.closePath()
+                
+                // EYES RIGHT
+                c.beginPath()
+                c.fillStyle = 'rgb(0, 0, 0)'
+                c.arc(this.moleX + 20, this.moleY - 30, 10, 0, Math.PI * 2)
+                c.fill()
+                c.closePath()
+                
+                // NOSE
+                c.beginPath()
+                c.fillStyle = 'rgb(0, 0, 0)'
+                c.arc(this.moleX, this.moleY - 15, 10, 0, Math.PI * 2)
+                c.fill()
+                c.closePath()
+                
+                // MOUTH
+                c.beginPath()
+                c.fillStyle = 'rgb(0, 0, 0)'
+                c.arc(this.moleX, this.moleY + 10, 8, 0, Math.PI * 2)
+                c.fill()
+                c.closePath()
+            }
+        }
+
+        let drawMole = new DrawMole(200, 250)
+        let drawMole2 = new DrawMole(400, 250)
+        let drawMole3 = new DrawMole(600, 250)
+        let drawMole4 = new DrawMole(800, 250)
+
+        drawMole.draw()
+        drawMole2.draw()
+        drawMole3.draw()
+        drawMole4.draw()
+        
+
+    </script>
+</body>
+</html>
