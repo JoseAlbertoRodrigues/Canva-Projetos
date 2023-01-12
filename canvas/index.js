@@ -244,7 +244,7 @@ function animate() {
                         projectiles.splice(projectileIndex, 1)
                     }, 0)
                 } else {
-                    // remove from scene altogther
+                    // remove from scene altogether
                     // increase our score
                     score += 250
                     scoreEl.innerHTML = score
