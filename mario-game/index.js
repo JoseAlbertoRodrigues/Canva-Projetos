@@ -49,7 +49,7 @@ class Platform {
             x,
             y
         }
-        
+
         this.width = 200
         this.height = 20
     }
