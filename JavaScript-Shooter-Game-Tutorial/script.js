@@ -33,7 +33,18 @@ const raven = new Raven()
 function animate(timestamp) {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
+    // valor em milissegundo entre o registro dataEhora, e o valor do registro de dataEhora salvo
+    let deltaTime = timestamp - lastTime
+    lastTime = timestamp  //testar console.log(timestamp)
+    timeToNextRaven += deltaTime // tempo para o próximo corvo esta aumentando cerca de 16 milessegundo por cada quadro //console.log(deltaTime)
 
+    if (timeToNextRaven > ravenInterval) {
+        ravens.push(new Raven())
+        timeToNextRaven = 0 // quando atingir o tempo de 500 milissegundo ele volta a zero, para começar a contar novamente
+        //console.log(ravens)
+    }
 }
 
 animate()
+
+// meu computador serve um quadro a cada 16 milissegundo as vezes 33 ou mais
