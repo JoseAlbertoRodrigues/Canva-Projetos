@@ -4,7 +4,6 @@ dropdown.addEventListener('change', function(e) {
     playerState = e.target.value
 })
 
-
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
