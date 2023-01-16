@@ -45,7 +45,7 @@ const animationStates = [
     },
     {
         name: 'sit',
-        frames: 6,
+        frames: 5,
     },
     {
         name: 'roll',
