@@ -1,4 +1,4 @@
-/* 
+/*
     video youtube, Sprite animation in JavaScript ( franks laboratory )
 
 canvas {
@@ -9,13 +9,27 @@ canvas {
     transform: translate(-50, -50%);
     width: 600px;
     height: 600px;
-} */
+}
+
+.controls {
+    position: absolute;
+    z-index: 10;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.controls, select, option {
+    font-size: 25px;
+}
+*/
 
 body {
     margin: auto;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column-reverse;
     width: 100vw;
     height: 100vh;
 
@@ -24,5 +38,12 @@ body {
 canvas {
     width: 600px;
     height: 600px;
-    border: 5px solid black;
+    /* border: 5px solid black; */
+}
+.controls {
+    margin-bottom: 50px;
+}
+
+.controls, select, option {
+    font-size: 25px;
 }
