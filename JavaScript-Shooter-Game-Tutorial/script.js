@@ -35,9 +35,15 @@ class Raven {
         this.flapInterval = Math.random() * 50 + 50
     }
     update(deltaTime) {
+        // mover em direção oposta se atingir a borda superior ou inferior
+        if (this.y < 0 || this.y > canvas.height - this.height) {
+            this.directionY = this.directionY * -1 // muda de direção
+        }
+
         // movendo aleatóriamente para cima ou para baixo de acordo com o eixo y vertical
         this.x -= this.directionX
         this.y += this.directionY
+        
         if (this.x < 0 - this.width) { // que o objeto se moveu totalmente para fora da tela
             this.markedForDeletion = true
         }
