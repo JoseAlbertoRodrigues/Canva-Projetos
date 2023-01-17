@@ -87,6 +87,19 @@ function drawScore() {
     c.fillText('Score: ' + score, 55, 80)
 }
 
+// evento ouvinte de click
+addEventListener('click', function(e) {
+    // console.log(e.x, e.y) // cordenadas x e y em relação a viewport
+   
+    // detecção pela cor do pixel em que clicamos, verificam a área da tela
+    // e retonam uma matriz como um objeto
+    // chamado : Uint8ClampedArray, é uma estrutura de dados simples cheia de números inteiros de 8 bits
+    // não atribuidos, é fixada, o que significa que pode conter apenas números inteiros entre um determinado 
+    // valor especificamente 0 e 255
+    const detectPixelColor = c.getImageData(e.x, e.y, 1, 1)
+    console.log(detectPixelColor)
+
+})
 
 function animate(timestamp) {
     requestAnimationFrame(animate)
