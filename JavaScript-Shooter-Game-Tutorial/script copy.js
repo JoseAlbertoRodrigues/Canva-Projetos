@@ -1,20 +1,22 @@
+// const canvas = document.querySelector('canvas')
 const canvas = document.getElementById('canvas1')
 const c = canvas.getContext('2d')
 canvas.width = innerWidth
 canvas.height = innerHeight
 
+// collisionCanvas - para hitbox
 const collisionCanvas = document.getElementById('collisionCanvas')
 const collisionCtx = collisionCanvas.getContext('2d')
 collisionCanvas.width = innerWidth
 collisionCanvas.height = innerHeight
 
-let score = 0
+let score = 0 // pontuação
 let gameOver = false
-c.font = '50px Impact'
+c.font = '50px Impact' // fonte da pontuação
 
-let timeToNextRaven = 0
-let ravenInterval = 500
-let lastTime = 0
+let timeToNextRaven = 0 // tempo para o próximo raven
+let ravenInterval = 500 // 500 milissegundos
+let lastTime = 0 // variavel para manter o valor do registro data/hora do loop anterior
 
 let ravens = []
 
@@ -22,16 +24,16 @@ class Raven {
     constructor() {
         this.spriteWidth = 271
         this.spriteHeight = 194
-        this.sizeModifier = Math.random() * 0.6 + 0.4
-        this.width = this.spriteWidth * this.sizeModifier
+        this.sizeModifier = Math.random() * 0.6 + 0.4 // modificador de tamanho
+        this.width = this.spriteWidth * this.sizeModifier // a multiplicação é mais rapida que a divisão
         this.height = this.spriteHeight * this.sizeModifier
 
         this.x = canvas.width
         this.y = Math.random() * (canvas.height - this.height)
-        this.directionX = Math.random() * 5 + 3
-        this.directionY = Math.random() * 5 - 2.5
+        this.directionX = Math.random() * 5 + 3 // movimento, velocidade horizontal
+        this.directionY = Math.random() * 5 - 2.5 // fica subindo e decendo o personagem, eixo y
 
-        this.markedForDeletion = false
+        this.markedForDeletion = false // marcada para exclusão (remover os objetos que passarem da tela, lado esquerdo)
 
         this.image = new Image()
         this.image.src = '../image/raven.png' // 1626x194
@@ -79,9 +81,11 @@ class Raven {
         if (this.x < 0 - this.width) {
             gameOver = true
         }
+        // console.log(deltaTime)
     }
 
     draw() {
+        // c.strokeRect(this.x, this.y, this.width, this.height)
         collisionCtx.fillStyle = this.color
         collisionCtx.fillRect(this.x, this.y, this.width, this.height)
         c.drawImage(
@@ -94,7 +98,7 @@ class Raven {
             this.y,
             this.width,
             this.height
-        )
+            )
     }
 }
 
@@ -199,11 +203,20 @@ function drawGameOver() {
 
 // evento ouvinte de click
 addEventListener('click', function(e) {
+    // console.log(e.x, e.y) // cordenadas x e y em relação a viewport
+   
+    // detecção pela cor do pixel em que clicamos, verificam a área da tela
+    // e retonam uma matriz como um objeto
+    // chamado : Uint8ClampedArray, é uma estrutura de dados simples cheia de números inteiros de 8 bits
+    // não atribuidos, é fixada, o que significa que pode conter apenas números inteiros entre um determinado 
+    // valor especificamente 0 e 255
+    
     const detectPixelColor = collisionCtx.getImageData(e.x, e.y, 1, 1)
+    // console.log(detectPixelColor)
 
     // variavel para obter a matriz
     const pc = detectPixelColor.data
-
+    // console.log(pc)
     // colisão acho que aqui está deixando lento quando clico
     ravens.forEach(object => {
         // se for verdadeiro temos colisão
@@ -212,6 +225,7 @@ addEventListener('click', function(e) {
             object.markedForDeletion = true
             score++
             explosions.push(new Explosion(object.x, object.y, object.width))
+            // console.log(explosions)
         }
     })
 
@@ -220,18 +234,25 @@ addEventListener('click', function(e) {
 function animate(timestamp) {
     c.clearRect(0, 0, canvas.width, canvas.height)
     collisionCtx.clearRect(0, 0, canvas.width, canvas.height)
+    // valor em milissegundo entre o registro dataEhora, e o valor do registro de dataEhora salvo
     let deltaTime = timestamp - lastTime
-    lastTime = timestamp
-    timeToNextRaven += deltaTime
+    lastTime = timestamp  //testar console.log(timestamp)
+    timeToNextRaven += deltaTime // tempo para o próximo corvo esta aumentando cerca de 16 milessegundo por cada quadro //console.log(deltaTime)
 
     if (timeToNextRaven > ravenInterval) {
         ravens.push(new Raven())
-        timeToNextRaven = 0
+        timeToNextRaven = 0 // quando atingir o tempo de 500 milissegundo ele volta a zero, para começar a contar novamente
+        // console.log(ravens)
 
+        // classificar os elementos em ordem crescente ou decrecente
+        // para que os corvos maiores apareçam na frente
+        // posso escolher de acordo com várias propriedades do corvo: this.width usado na função(a.width)
         ravens.sort(function(a, b) {
             return a.width - b.width
         })
     }
+    // console.log(deltaTime) // aqui o deltaTime o primeiro valor é NAN
+    // console.log(timestamp) // o primeiro valor aqui da (UNDEFINED) esse é a raiz do problema, é só eu colocar um valor no: animate(0)
 
     drawScore()
     
@@ -239,7 +260,9 @@ function animate(timestamp) {
         object.update(deltaTime)
         object.draw()
     })
-
+    // adicionando os objetos
+    // [...particles, ...ravens, ...explosions].forEach(object => object.update(deltaTime)) // não consegui usar os dois
+    // [...particles, ...ravens, ...explosions].forEach(object => object.draw())
     ravens.forEach((object) => {
         object.update(deltaTime)
         object.draw()
@@ -264,3 +287,18 @@ function animate(timestamp) {
 }
 
 animate(0)
+
+// meu computador serve um quadro a cada 16 milissegundo as vezes 33 ou mais
+
+/**
+ *
+    [...ravens] array literal, 3 pontos são chamados de spread operator
+
+    estou espalhando meu array ravens dentro deste novo array rápido que criei,
+    permite espalhar iterável como este array ravens para ser expandido outro array
+
+    [...ravens].forEach(object => object.update())
+    percorrerá toda a matriz de ravens e irá acionar o método de atualização em todos eles,
+    já que estamos dentro do loop de animação, isso acontecerá para cada quadro de animação,
+    farei exatamente a mesma coisa para draw()
+ */
