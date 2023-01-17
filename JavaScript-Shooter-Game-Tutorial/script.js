@@ -1,8 +1,14 @@
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
-
 canvas.width = innerWidth
 canvas.height = innerHeight
+
+// collisionCanvas - para hitbox
+const collisionCanvas = document.getElementById('collisionsCanvas')
+const collisionCtx = collisionCanvas.getContext('2d')
+collisionCanvas.width = innerWidth
+collisionCanvas.height = innerHeight
+
 
 let timeToNextRaven = 0 // tempo para o próximo raven
 let ravenInterval = 500 // 500 milissegundos
@@ -97,7 +103,7 @@ addEventListener('click', function(e) {
     // não atribuidos, é fixada, o que significa que pode conter apenas números inteiros entre um determinado 
     // valor especificamente 0 e 255
     const detectPixelColor = c.getImageData(e.x, e.y, 1, 1)
-    console.log(detectPixelColor)
+    // console.log(detectPixelColor)
 
 })
 
