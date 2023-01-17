@@ -47,6 +47,8 @@ class Raven {
         // cor aleatória para cada raven
         this.randomColors = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255),Math.floor(Math.random() * 255)]
         this.color = 'rgb(' + this.randomColors[0] + ',' + this.randomColors[1] + ',' + this.randomColors[2] + ')'
+
+        this.hasTrail = Math.random() > 0.5
     }
     update(deltaTime) {
         // mover em direção oposta se atingir a borda superior ou inferior
@@ -69,12 +71,16 @@ class Raven {
                 this.frame++
             }
             this.timeSinceFlap = 0
+            if (this.hasTrail) {
+                for(let i = 0; i < 5; i++) {
+                    particles.push(new Particle(this.x, this.y, this.width, this.color))
+                }
+            }
         }
 
         if (this.x < 0 - this.width) {
             gameOver = true
         }
-
         // console.log(deltaTime)
     }
 
@@ -142,6 +148,39 @@ class Explosion {
             this.size,
             this.size
         )
+    }
+}
+
+let particles = []
+class Particle {
+    constructor(x, y, size, color) {
+        this.size = size
+        this.x = x + this.size / 2 + Math.random() * 50 - 25
+        this.y = y + this.size / 3 + Math.random() * 50 - 25
+        this.radius = Math.random() * this.size/10
+        this.maxRadius = Math.random() * 20 + 35
+        this.markedForDeletion = false
+        this.speedX = Math.random() * 1 + 0.5
+        this.color = color
+    }
+
+    update() {
+        this.x += this.speedX
+        this.radius += 0.5
+        if (this.radius > this.maxRadius - 5) {
+            this.markedForDeletion = true
+        }
+    }
+
+    draw() {
+        c.save()
+        c.globalAlpha = 1 - this.radius/this.maxRadius
+        c.beginPath()
+        c.fillStyle = this.color
+        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2)
+        c.fill()
+        c.restore()
+
     }
 }
 
@@ -216,13 +255,19 @@ function animate(timestamp) {
     // console.log(timestamp) // o primeiro valor aqui da (UNDEFINED) esse é a raiz do problema, é só eu colocar um valor no: animate(0)
 
     drawScore()
+    
+    particles.forEach((object) => {
+        object.update(deltaTime)
+        object.draw()
+    })
     // adicionando os objetos
-    // [...ravens, ...explosions].forEach(object => object.update(deltaTime)) // não consegui usar os dois
-    // [...ravens, ...explosions].forEach(object => object.draw())
+    // [...particles, ...ravens, ...explosions].forEach(object => object.update(deltaTime)) // não consegui usar os dois
+    // [...particles, ...ravens, ...explosions].forEach(object => object.draw())
     ravens.forEach((object) => {
         object.update(deltaTime)
         object.draw()
     })
+
     explosions.forEach((object) => {
         object.update(deltaTime)
         object.draw()
@@ -230,6 +275,8 @@ function animate(timestamp) {
 
     // excluir o objeto que passar do canto esquerdo da tela
     ravens = ravens.filter(object => !object.markedForDeletion)
+    explosions = explosions.filter(object => !object.markedForDeletion)
+    particles =particles.filter(object => !object.markedForDeletion)
 
     // game Over
     if (!gameOver) { // se for falso
