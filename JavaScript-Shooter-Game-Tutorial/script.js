@@ -4,18 +4,17 @@ canvas.width = innerWidth
 canvas.height = innerHeight
 
 // collisionCanvas - para hitbox
-const collisionCanvas = document.getElementById('collisionsCanvas')
+const collisionCanvas = document.getElementById('collisionCanvas')
 const collisionCtx = collisionCanvas.getContext('2d')
 collisionCanvas.width = innerWidth
 collisionCanvas.height = innerHeight
 
+let score = 0 // pontuação
+c.font = '50px Impact' // fonte da pontuação
 
 let timeToNextRaven = 0 // tempo para o próximo raven
 let ravenInterval = 500 // 500 milissegundos
 let lastTime = 0 // variavel para manter o valor do registro data/hora do loop anterior
-
-let score = 0 // pontuação
-c.font = '50px Impact' // fonte da pontuação
 
 let ravens = []
 
@@ -56,7 +55,7 @@ class Raven {
         // movendo aleatóriamente para cima ou para baixo de acordo com o eixo y vertical
         this.x -= this.directionX
         this.y += this.directionY
-        
+
         if (this.x < 0 - this.width) { // que o objeto se moveu totalmente para fora da tela
             this.markedForDeletion = true
         }
@@ -67,7 +66,7 @@ class Raven {
             } else {
                 this.frame++
             }
-            this.timeSinceFlap = 0 
+            this.timeSinceFlap = 0
         }
 
         // console.log(deltaTime)
@@ -90,7 +89,55 @@ class Raven {
             )
     }
 }
-// const raven = new Raven()
+
+let explosions = []
+class Explosion {
+    constructor(x, y, size) {
+        this.image = new Image()
+        this.image.src = '../image/boom.png'
+        this.spriteWidth = 200
+        this.spriteHeight = 179
+        this.size = size
+        this.x = x
+        this.y = y
+        this.frame = 0
+
+        this.sound = new Audio()
+        this.sound.src = '../audio/boom.wav'
+
+        this.timeSinceLastFrame = 0 // variável para acumular valores de tempo delta
+        this.frameInterval = 200 // limite para o próximo quadro for adicionado
+        this.markedForDeletion = false
+    }
+
+    update(deltaTime) {
+        if (this.frame === 0) { // existe maneira melhor de colocar som
+            this.sound.play()
+        }
+        this.timeSinceLastFrame += deltaTime
+        if (this.timeSinceLastFrame > this.frameInterval) {
+            this.frame++
+            this.timeSinceLastFrame = 0
+            if ( this.frame > 5) {
+                this.markedForDeletion = true
+            }
+        }
+    }
+
+    draw() {
+        c.drawImage(
+            this.image,
+            this.frame * this.spriteWidth,
+            0,
+            this.spriteWidth,
+            this.spriteHeight,
+            this.x,
+            this.y - this.size / 4,
+            this.size,
+            this.size
+        )
+    }
+}
 
 function drawScore() {
     c.fillStyle = 'black'
@@ -114,20 +161,24 @@ addEventListener('click', function(e) {
 
     // variavel para obter a matriz
     const pc = detectPixelColor.data
+    // console.log(pc)
+    // colisão acho que aqui está deixando lento quando clico
     ravens.forEach(object => {
         // se for verdadeiro temos colisão
         if (object.randomColors[0] === pc[0] && object.randomColors[1] === pc[1] && object.randomColors[2] === pc[2]) {
+            // collision detected
             object.markedForDeletion = true
             score++
+            explosions.push(new Explosion(object.x, object.y, object.width))
+            // console.log(explosions)
         }
     })
 
 })
 
 function animate(timestamp) {
-    requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
-    collisionCtx.clearRect(0, 0, collisionCanvas.width, collisionCanvas.height)
+    collisionCtx.clearRect(0, 0, canvas.width, canvas.height)
     // valor em milissegundo entre o registro dataEhora, e o valor do registro de dataEhora salvo
     let deltaTime = timestamp - lastTime
     lastTime = timestamp  //testar console.log(timestamp)
@@ -150,16 +201,21 @@ function animate(timestamp) {
 
     drawScore()
     // adicionando os objetos
-    // [...ravens].forEach(object => object.update()) não consegui usar os dois
-    // [...ravens].forEach(object => object.draw())
+    // [...ravens, ...explosions].forEach(object => object.update(deltaTime)) // não consegui usar os dois
+    // [...ravens, ...explosions].forEach(object => object.draw())
     ravens.forEach((object) => {
         object.update(deltaTime)
         object.draw()
     })
+    explosions.forEach((object) => {
+        object.update(deltaTime)
+        object.draw()
+    })
+
 
     // excluir o objeto que passar do canto esquerdo da tela
     ravens = ravens.filter(object => !object.markedForDeletion)
-
+    requestAnimationFrame(animate)
 }
 
 animate(0)
