@@ -35,7 +35,9 @@ class Raven {
         this.flapInterval = Math.random() * 50 + 50
     }
     update(deltaTime) {
+        // movendo aleatóriamente para cima ou para baixo de acordo com o eixo y vertical
         this.x -= this.directionX
+        this.y += this.directionY
         if (this.x < 0 - this.width) { // que o objeto se moveu totalmente para fora da tela
             this.markedForDeletion = true
         }
