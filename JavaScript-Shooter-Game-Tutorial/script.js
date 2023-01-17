@@ -12,24 +12,59 @@ let ravens = []
 
 class Raven {
     constructor() {
-        this.width = 100
-        this.height = 50
+        this.spriteWidth = 271
+        this.spriteHeight = 194
+        this.sizeModifier = Math.random() * 0.6 + 0.4 // modificador de tamanho
+        this.width = this.spriteWidth * this.sizeModifier // a multiplicação é mais rapida que a divisão
+        this.height = this.spriteHeight * this.sizeModifier
+
         this.x = canvas.width
         this.y = Math.random() * (canvas.height - this.height)
         this.directionX = Math.random() * 5 + 3 // movimento, velocidade horizontal
         this.directionY = Math.random() * 5 - 2.5 // fica subindo e decendo o personagem, eixo y
 
         this.markedForDeletion = false // marcada para exclusão (remover os objetos que passarem da tela, lado esquerdo)
+
+        this.image = new Image()
+        this.image.src = '../image/raven.png' // 1626x194
+        this.frame = 0
+        this.maxFrame = 4
+
+        // controlar a velocidade dos frames de acordo com o tempo, para cada um será diferente
+        this.timeSinceFlap = 0
+        this.flapInterval = Math.random() * 50 + 50
     }
-    update() {
+    update(deltaTime) {
         this.x -= this.directionX
         if (this.x < 0 - this.width) { // que o objeto se moveu totalmente para fora da tela
             this.markedForDeletion = true
         }
+        this.timeSinceFlap += deltaTime // aumentao tempo de deltaTime por cada quadro
+        if (this.timeSinceFlap > this.flapInterval) { // se for verdadeiro faça o que está abaixo
+            if (this.frame > this.maxFrame) {
+                this.frame = 0
+            } else {
+                this.frame++
+            }
+            this.timeSinceFlap = 0 
+        }
+
+        // console.log(deltaTime)
     }
 
     draw() {
-        c.fillRect(this.x, this.y, this.width, this.height)
+        c.strokeRect(this.x, this.y, this.width, this.height)
+        c.drawImage(
+            this.image,
+            this.frame * this.spriteWidth,
+            0,
+            this.spriteWidth,
+            this.spriteHeight,
+            this.x,
+            this.y,
+            this.width,
+            this.height
+            )
     }
 }
 
@@ -55,7 +90,7 @@ function animate(timestamp) {
     // [...ravens].forEach(object => object.update()) não consegui usar os dois
     // [...ravens].forEach(object => object.draw())
     ravens.forEach((object) => {
-        object.update()
+        object.update(deltaTime)
         object.draw()
     })
 
