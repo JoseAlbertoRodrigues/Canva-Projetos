@@ -8,6 +8,9 @@ let timeToNextRaven = 0 // tempo para o próximo raven
 let ravenInterval = 500 // 500 milissegundos
 let lastTime = 0 // variavel para manter o valor do registro data/hora do loop anterior
 
+let score = 0 // pontuação
+c.font = '50px Impact' // fonte da pontuação
+
 let ravens = []
 
 class Raven {
@@ -75,8 +78,15 @@ class Raven {
             )
     }
 }
+// const raven = new Raven()
 
-const raven = new Raven()
+function drawScore() {
+    c.fillStyle = 'black'
+    c.fillText('Score: ' + score, 50, 75)
+    c.fillStyle = 'white'
+    c.fillText('Score: ' + score, 55, 80)
+}
+
 
 function animate(timestamp) {
     requestAnimationFrame(animate)
@@ -94,6 +104,7 @@ function animate(timestamp) {
     // console.log(deltaTime) // aqui o deltaTime o primeiro valor é NAN
     // console.log(timestamp) // o primeiro valor aqui da (UNDEFINED) esse é a raiz do problema, é só eu colocar um valor no: animate(0)
 
+    drawScore()
     // adicionando os objetos
     // [...ravens].forEach(object => object.update()) não consegui usar os dois
     // [...ravens].forEach(object => object.draw())
