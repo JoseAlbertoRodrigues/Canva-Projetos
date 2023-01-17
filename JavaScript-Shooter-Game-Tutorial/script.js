@@ -42,6 +42,10 @@ class Raven {
         // controlar a velocidade dos frames de acordo com o tempo, para cada um será diferente
         this.timeSinceFlap = 0
         this.flapInterval = Math.random() * 50 + 50
+
+        // cor aleatória para cada raven
+        this.randomColors = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255),Math.floor(Math.random() * 255)]
+        this.color = 'rgb(' + this.randomColors[0] + ',' + this.randomColors[1] + ',' + this.randomColors[2] + ')'
     }
     update(deltaTime) {
         // mover em direção oposta se atingir a borda superior ou inferior
@@ -70,7 +74,9 @@ class Raven {
     }
 
     draw() {
-        c.strokeRect(this.x, this.y, this.width, this.height)
+        // c.strokeRect(this.x, this.y, this.width, this.height)
+        collisionCtx.fillStyle = this.color
+        collisionCtx.fillRect(this.x, this.y, this.width, this.height)
         c.drawImage(
             this.image,
             this.frame * this.spriteWidth,
@@ -102,14 +108,26 @@ addEventListener('click', function(e) {
     // chamado : Uint8ClampedArray, é uma estrutura de dados simples cheia de números inteiros de 8 bits
     // não atribuidos, é fixada, o que significa que pode conter apenas números inteiros entre um determinado 
     // valor especificamente 0 e 255
-    const detectPixelColor = c.getImageData(e.x, e.y, 1, 1)
+    
+    const detectPixelColor = collisionCtx.getImageData(e.x, e.y, 1, 1)
     // console.log(detectPixelColor)
+
+    // variavel para obter a matriz
+    const pc = detectPixelColor.data
+    ravens.forEach(object => {
+        // se for verdadeiro temos colisão
+        if (object.randomColors[0] === pc[0] && object.randomColors[1] === pc[1] && object.randomColors[2] === pc[2]) {
+            object.markedForDeletion = true
+            score++
+        }
+    })
 
 })
 
 function animate(timestamp) {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
+    collisionCtx.clearRect(0, 0, collisionCanvas.width, collisionCanvas.height)
     // valor em milissegundo entre o registro dataEhora, e o valor do registro de dataEhora salvo
     let deltaTime = timestamp - lastTime
     lastTime = timestamp  //testar console.log(timestamp)
@@ -119,6 +137,13 @@ function animate(timestamp) {
         ravens.push(new Raven())
         timeToNextRaven = 0 // quando atingir o tempo de 500 milissegundo ele volta a zero, para começar a contar novamente
         // console.log(ravens)
+
+        // classificar os elementos em ordem crescente ou decrecente
+        // para que os corvos maiores apareçam na frente
+        // posso escolher de acordo com várias propriedades do corvo: this.width usado na função(a.width)
+        ravens.sort(function(a, b) {
+            return a.width - b.width
+        })
     }
     // console.log(deltaTime) // aqui o deltaTime o primeiro valor é NAN
     // console.log(timestamp) // o primeiro valor aqui da (UNDEFINED) esse é a raiz do problema, é só eu colocar um valor no: animate(0)
