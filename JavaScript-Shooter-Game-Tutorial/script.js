@@ -1,4 +1,5 @@
-const canvas = document.querySelector('canvas')
+// const canvas = document.querySelector('canvas')
+const canvas = document.getElementById('canvas1')
 const c = canvas.getContext('2d')
 canvas.width = innerWidth
 canvas.height = innerHeight
@@ -10,6 +11,7 @@ collisionCanvas.width = innerWidth
 collisionCanvas.height = innerHeight
 
 let score = 0 // pontuação
+let gameOver = false
 c.font = '50px Impact' // fonte da pontuação
 
 let timeToNextRaven = 0 // tempo para o próximo raven
@@ -67,6 +69,10 @@ class Raven {
                 this.frame++
             }
             this.timeSinceFlap = 0
+        }
+
+        if (this.x < 0 - this.width) {
+            gameOver = true
         }
 
         // console.log(deltaTime)
@@ -139,11 +145,21 @@ class Explosion {
     }
 }
 
+// draw Score
 function drawScore() {
     c.fillStyle = 'black'
     c.fillText('Score: ' + score, 50, 75)
     c.fillStyle = 'white'
     c.fillText('Score: ' + score, 55, 80)
+}
+
+// draw Game Over
+function drawGameOver() {
+    c.textAlign = 'center'
+    c.fillStyle = 'black'
+    c.fillText('GAME OVER, your score is ' + score, canvas.width/2, canvas.height/2)
+    c.fillStyle = 'white'
+    c.fillText('GAME OVER, your score is ' + score, canvas.width/2 + 5, canvas.height/2 + 5)
 }
 
 // evento ouvinte de click
@@ -212,10 +228,15 @@ function animate(timestamp) {
         object.draw()
     })
 
-
     // excluir o objeto que passar do canto esquerdo da tela
     ravens = ravens.filter(object => !object.markedForDeletion)
-    requestAnimationFrame(animate)
+
+    // game Over
+    if (!gameOver) { // se for falso
+        requestAnimationFrame(animate)
+    } else {
+        drawGameOver()
+    }
 }
 
 animate(0)
