@@ -13,15 +13,23 @@ addEventListener('load', function() {
             this.width = width
             this.height = height
             this.enemies = []
-            this.#addNewEnemy() // nova instância do meu objeto, console.log(this.enemies) // ver se funcionou
+            this.enemyInterval = 1000
+            this.enemyTimer = 0
+            // this.#addNewEnemy() // nova instância do meu objeto, console.log(this.enemies) // ver se funcionou
         }
 
-        update() {
+        update(deltaTime) {
+            if (this.enemyTimer > this.enemyInterval) {
+                this.#addNewEnemy()
+                this.enemyTimer = 0
+            } else {
+                this.enemyTimer += deltaTime
+            }
             this.enemies.forEach(object => object.update())
         }
 
         draw() {
-            this.enemies.forEach(object => object.draw())
+            this.enemies.forEach(object => object.draw(this.c))
         }
 
         #addNewEnemy() { 
@@ -48,7 +56,7 @@ addEventListener('load', function() {
             this.x--
         }
 
-        draw() {
+        draw(c) {
             c.fillRect(this.x, this.y, this.width, this.height)
         }
     }
@@ -61,7 +69,7 @@ addEventListener('load', function() {
         const deltaTime = timeStamp - lastTime
         lastTime = timeStamp // console.log(deltaTime) // meu tempo deltano meu pc é de 16 milissegundos
 
-        game.update()
+        game.update(deltaTime)
         game.draw()
     }
 
