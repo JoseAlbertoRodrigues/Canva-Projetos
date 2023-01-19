@@ -34,7 +34,7 @@ addEventListener('load', function() {
             this.enemies.forEach(object => object.draw(this.c))
         }
 
-        #addNewEnemy() { 
+        #addNewEnemy() {
             // Método privado, só pode ser chamado de dentro da minha classe de jogo para gerenciar
             // algum tipo de funcionalidade interna, em nosso casso adicionar um novo inimigo, na matriz this.enemies
 
@@ -47,7 +47,7 @@ addEventListener('load', function() {
         // aqui será cada inimigo individual
         constructor(game) {
             this.game = game
-            console.log(this.game) // tenho acesso a largura do meu jogo
+            // console.log(this.game) // tenho acesso a largura do meu jogo
             this.markedForDeletion = false
             
             // this.x = this.game.width // aqui estará logo atrás da da borda direita da tela
@@ -57,7 +57,7 @@ addEventListener('load', function() {
         }
 
         update() {
-            this.x--
+            this.x -= this.velocityX * deltaTime
             // remove enemies
             if (this.x < 0 - this.width) {
                 this.markedForDeletion = true
@@ -65,18 +65,31 @@ addEventListener('load', function() {
         }
 
         draw(c) {
-            c.fillRect(this.x, this.y, this.width, this.height)
+            c.drawImage(
+                this.image,
+                0,
+                0,
+                this.spriteWidth,
+                this.spriteHeight,
+                this.x,
+                this.y,
+                this.width,
+                this.height
+            )
         }
     }
 
     class Worm extends Enemy {
         constructor() {
             super(game)
+            this.spriteWidth = 229
+            this.spriteHeight = 171
+            this.width = this.spriteWidth / 2
+            this.height = this.spriteHeight / 2
             this.x = this.game.width // aqui estará logo atrás da da borda direita da tela
             this.y = Math.random() * this.game.height // altura aleatória da tela, eu consigo isso por causa do this em: this.enemies.push(new Enemy(this))
-            this.width = 100
-            this.height = 100
-            this.image = worm
+            this.image = worm // está vindo do html, sem precisar usar o getElementById... // console.log(this.image)
+            this.velocityX = Math.random() * 0.1 + 0.1
         }
     }
 
