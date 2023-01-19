@@ -30,15 +30,18 @@ addEventListener('load', function() {
     class Enemy {
         // aqui será cada inimigo individual
         constructor() {
-
+            this.x = 100
+            this.y = 100
+            this.width = 100
+            this.height = 100
         }
 
         update() {
-
+            this.x--
         }
 
         draw() {
-
+            c.fillRect(this.x, this.y, this.width, this.height)
         }
     }
 
