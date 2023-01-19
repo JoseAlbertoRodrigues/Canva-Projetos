@@ -1,0 +1,44 @@
+/*
+    video youtube, JavaScript Shooter Game Tutorial ( franks laboratory )
+
+canvas {
+    border: 5px solid black;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50, -50%);
+    width: 600px;
+    height: 600px;
+}
+*/
+
+/* body {
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column-reverse;
+    width: 100vw;
+    height: 100vh;
+
+} */
+
+/* body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+} */
+
+#canvas1 {
+    border: 3px solid black;
+    width: 500px;
+    height: 800px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+img {
+    display: none;
+}
