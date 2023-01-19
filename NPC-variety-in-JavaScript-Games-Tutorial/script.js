@@ -8,7 +8,10 @@ addEventListener('load', function() {
 
     class Game {
         // aqui terá: atualização de todo o jogo, inimigo, jogadores, obstáculos, menus de fundo, e assim por diante
-        constructor() {
+        constructor(c, width, height) {
+            this.c = c
+            this.width = width
+            this.height = height
             this.enemies = []
             this.#addNewEnemy() // nova instância do meu objeto, console.log(this.enemies) // ver se funcionou
         }
@@ -25,16 +28,18 @@ addEventListener('load', function() {
             // Método privado, só pode ser chamado de dentro da minha classe de jogo para gerenciar
             // algum tipo de funcionalidade interna, em nosso casso adicionar um novo inimigo, na matriz this.enemies
 
-            this.enemies.push(new Enemy())
+            this.enemies.push(new Enemy(this))
 
         }
     }
 
     class Enemy {
         // aqui será cada inimigo individual
-        constructor() {
-            this.x = 100
-            this.y = 100
+        constructor(game) {
+            this.game = game
+            console.log(this.game) // tenho acesso a largura do meu jogo
+            this.x = this.game.width // aqui estará logo atrás da da borda direita da tela
+            this.y = Math.random() * this.game.height // altura aleatória da tela, eu consigo isso por causa do this em: this.enemies.push(new Enemy(this))
             this.width = 100
             this.height = 100
         }
@@ -48,7 +53,7 @@ addEventListener('load', function() {
         }
     }
 
-    const game = new Game() // ver se funcionou, novo objeto em branco
+    const game = new Game(c, canvas.width, canvas.height) // ver se funcionou, novo objeto em branco
     let lastTime = 1
     function animate(timeStamp) {
         requestAnimationFrame(animate)
