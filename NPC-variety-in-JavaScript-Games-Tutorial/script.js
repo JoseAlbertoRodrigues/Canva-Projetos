@@ -19,6 +19,8 @@ addEventListener('load', function() {
         }
 
         update(deltaTime) {
+            // cria um novo array no mesmo, com a propriedade que eu passei
+            this.enemies = this.enemies.filter(object => !object.markedForDeletion)
             if (this.enemyTimer > this.enemyInterval) {
                 this.#addNewEnemy()
                 this.enemyTimer = 0
@@ -50,10 +52,15 @@ addEventListener('load', function() {
             this.y = Math.random() * this.game.height // altura aleatória da tela, eu consigo isso por causa do this em: this.enemies.push(new Enemy(this))
             this.width = 100
             this.height = 100
+            this.markedForDeletion = false
         }
 
         update() {
             this.x--
+            // remove enemies
+            if (this.x < 0 - this.width) {
+                this.markedForDeletion = true
+            }
         }
 
         draw(c) {
