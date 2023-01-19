@@ -10,19 +10,22 @@ addEventListener('load', function() {
         // aqui terá: atualização de todo o jogo, inimigo, jogadores, obstáculos, menus de fundo, e assim por diante
         constructor() {
             this.enemies = []
+            this.#addNewEnemy() // nova instância do meu objeto, console.log(this.enemies) // ver se funcionou
         }
 
         update() {
-
+            this.enemies.forEach(object => object.update())
         }
 
         draw() {
-
+            this.enemies.forEach(object => object.draw())
         }
 
         #addNewEnemy() { 
             // Método privado, só pode ser chamado de dentro da minha classe de jogo para gerenciar
             // algum tipo de funcionalidade interna, em nosso casso adicionar um novo inimigo, na matriz this.enemies
+
+            this.enemies.push(new Enemy())
 
         }
     }
@@ -45,13 +48,16 @@ addEventListener('load', function() {
         }
     }
 
+    const game = new Game() // ver se funcionou, novo objeto em branco
     let lastTime = 1
     function animate(timeStamp) {
         requestAnimationFrame(animate)
         c.clearRect(0, 0, canvas.width, canvas.height)
         const deltaTime = timeStamp - lastTime
-        lastTime = timeStamp
-        // console.log(deltaTime) // meu tempo deltano meu pc é de 16 milissegundos
+        lastTime = timeStamp // console.log(deltaTime) // meu tempo deltano meu pc é de 16 milissegundos
+
+        game.update()
+        game.draw()
     }
 
     animate(0)
