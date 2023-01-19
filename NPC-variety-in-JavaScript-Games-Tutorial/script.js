@@ -42,12 +42,14 @@ addEventListener('load', function() {
         }
     }
 
-    function animate() {
+    let lastTime = 1
+    function animate(timeStamp) {
         requestAnimationFrame(animate)
         c.clearRect(0, 0, canvas.width, canvas.height)
-
-        c.fillRect(50,50, 100, 100)
+        const deltaTime = timeStamp - lastTime
+        lastTime = timeStamp
+        // console.log(deltaTime) // meu tempo deltano meu pc é de 16 milissegundos
     }
 
-    animate()
+    animate(0)
 })
