@@ -38,7 +38,7 @@ addEventListener('load', function() {
             // Método privado, só pode ser chamado de dentro da minha classe de jogo para gerenciar
             // algum tipo de funcionalidade interna, em nosso casso adicionar um novo inimigo, na matriz this.enemies
 
-            this.enemies.push(new Enemy(this))
+            this.enemies.push(new Worm(this)) //agora fiz a sybstituição, this.enemies.push(new Enemy(this))
 
         }
     }
@@ -48,11 +48,12 @@ addEventListener('load', function() {
         constructor(game) {
             this.game = game
             console.log(this.game) // tenho acesso a largura do meu jogo
-            this.x = this.game.width // aqui estará logo atrás da da borda direita da tela
-            this.y = Math.random() * this.game.height // altura aleatória da tela, eu consigo isso por causa do this em: this.enemies.push(new Enemy(this))
-            this.width = 100
-            this.height = 100
             this.markedForDeletion = false
+            
+            // this.x = this.game.width // aqui estará logo atrás da da borda direita da tela
+            // this.y = Math.random() * this.game.height // altura aleatória da tela, eu consigo isso por causa do this em: this.enemies.push(new Enemy(this))
+            // this.width = 100
+            // this.height = 100
         }
 
         update() {
@@ -65,6 +66,17 @@ addEventListener('load', function() {
 
         draw(c) {
             c.fillRect(this.x, this.y, this.width, this.height)
+        }
+    }
+
+    class Worm extends Enemy {
+        constructor() {
+            super(game)
+            this.x = this.game.width // aqui estará logo atrás da da borda direita da tela
+            this.y = Math.random() * this.game.height // altura aleatória da tela, eu consigo isso por causa do this em: this.enemies.push(new Enemy(this))
+            this.width = 100
+            this.height = 100
+            this.image = worm
         }
     }
 
