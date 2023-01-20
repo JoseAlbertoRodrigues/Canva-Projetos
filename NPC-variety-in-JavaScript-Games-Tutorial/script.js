@@ -68,6 +68,10 @@ addEventListener('load', function() {
             // this.y = Math.random() * this.game.height // altura aleatória da tela, eu consigo isso por causa do this em: this.enemies.push(new Enemy(this))
             // this.width = 100
             // this.height = 100
+            this.frameX = 0
+            this.maxFrame = 5
+            this.frameInterval = 100
+            this.frameTimer = 0
         }
 
         update(deltaTime) {
@@ -76,12 +80,22 @@ addEventListener('load', function() {
             if (this.x < 0 - this.width) {
                 this.markedForDeletion = true
             }
+            if (this.frameTimer > this.frameInterval) {
+                if ( this.frameX < this.maxFrame) {
+                    this.frameX++
+                } else {
+                    this.frameX = 0
+                    this.frameTimer = 0
+                }
+            } else {
+                this.frameTimer += deltaTime
+            }
         }
 
         draw(c) {
             c.drawImage(
                 this.image,
-                0,
+                this.frameX * this.spriteWidth,
                 0,
                 this.spriteWidth,
                 this.spriteHeight,
@@ -154,6 +168,10 @@ addEventListener('load', function() {
 
         update(deltaTime) {
             super.update(deltaTime)
+            // remove aranha
+            if (this.y < 0 - this.height * 2) {
+                this.markedForDeletion = true
+            }
             this.y += this.velocityY * deltaTime
             if (this.y > this.maxLength) {
                 this.velocityY *= -1
