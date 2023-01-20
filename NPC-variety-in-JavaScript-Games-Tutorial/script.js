@@ -15,7 +15,9 @@ addEventListener('load', function() {
             this.enemies = []
             this.enemyInterval = 100
             this.enemyTimer = 0
+            this.enemyTypes = ['worm', 'ghost']
             // this.#addNewEnemy() // nova instância do meu objeto, console.log(this.enemies) // ver se funcionou
+            
         }
 
         update(deltaTime) {
@@ -38,12 +40,18 @@ addEventListener('load', function() {
             // Método privado, só pode ser chamado de dentro da minha classe de jogo para gerenciar
             // algum tipo de funcionalidade interna, em nosso casso adicionar um novo inimigo, na matriz this.enemies
 
-            this.enemies.push(new Worm(this)) // agora fiz a substituição, this.enemies.push(new Enemy(this))
+            const randomEnemy  = this.enemyTypes[Math.floor(Math.random() * this.enemyTypes.length)]
 
-            // ordenando os inimigos por ordem crescente
-            this.enemies.sort(function(a,b) {
-                return a.y - b.y
-            })
+            if (randomEnemy == 'worm') {
+                this.enemies.push(new Worm(this)) // agora fiz a substituição, this.enemies.push(new Enemy(this))
+            } else if (randomEnemy == 'ghost') {
+                this.enemies.push(new Ghost(this))
+            }
+
+            // ordenando os inimigos por ordem crescente na posição y
+            // this.enemies.sort(function(a,b) {
+            //     return a.y - b.y
+            // })
 
         }
     }
@@ -92,7 +100,8 @@ addEventListener('load', function() {
             this.width = this.spriteWidth / 2
             this.height = this.spriteHeight / 2
             this.x = this.game.width // aqui estará logo atrás da da borda direita da tela
-            this.y = Math.random() * this.game.height // altura aleatória da tela, eu consigo isso por causa do this em: this.enemies.push(new Enemy(this))
+            this.y = this.game.height - this.height
+            // this.y = Math.random() * this.game.height // altura aleatória da tela, eu consigo isso por causa do this em: this.enemies.push(new Enemy(this))
             this.image = worm // está vindo do html, sem precisar usar o getElementById... // console.log(this.image)
             this.velocityX = Math.random() * 0.1 + 0.1
         }
@@ -106,7 +115,7 @@ addEventListener('load', function() {
             this.width = this.spriteWidth / 2
             this.height = this.spriteHeight / 2
             this.x = this.game.width
-            this.y = Math.random() * this.game.height
+            this.y = Math.random() * this.game.height * 0.6
             this.image = ghost
             this.velocityX = Math.random() * 0.2 + 0.1
         }
