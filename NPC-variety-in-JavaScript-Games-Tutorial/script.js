@@ -13,7 +13,7 @@ addEventListener('load', function() {
             this.width = width
             this.height = height
             this.enemies = []
-            this.enemyInterval = 1000
+            this.enemyInterval = 100
             this.enemyTimer = 0
             // this.#addNewEnemy() // nova instância do meu objeto, console.log(this.enemies) // ver se funcionou
         }
@@ -27,7 +27,7 @@ addEventListener('load', function() {
             } else {
                 this.enemyTimer += deltaTime
             }
-            this.enemies.forEach(object => object.update())
+            this.enemies.forEach(object => object.update(deltaTime))
         }
 
         draw() {
@@ -38,7 +38,12 @@ addEventListener('load', function() {
             // Método privado, só pode ser chamado de dentro da minha classe de jogo para gerenciar
             // algum tipo de funcionalidade interna, em nosso casso adicionar um novo inimigo, na matriz this.enemies
 
-            this.enemies.push(new Worm(this)) //agora fiz a sybstituição, this.enemies.push(new Enemy(this))
+            this.enemies.push(new Worm(this)) // agora fiz a substituição, this.enemies.push(new Enemy(this))
+
+            // ordenando os inimigos por ordem crescente
+            this.enemies.sort(function(a,b) {
+                return a.y - b.y
+            })
 
         }
     }
@@ -49,14 +54,14 @@ addEventListener('load', function() {
             this.game = game
             // console.log(this.game) // tenho acesso a largura do meu jogo
             this.markedForDeletion = false
-            
+
             // this.x = this.game.width // aqui estará logo atrás da da borda direita da tela
             // this.y = Math.random() * this.game.height // altura aleatória da tela, eu consigo isso por causa do this em: this.enemies.push(new Enemy(this))
             // this.width = 100
             // this.height = 100
         }
 
-        update() {
+        update(deltaTime) {
             this.x -= this.velocityX * deltaTime
             // remove enemies
             if (this.x < 0 - this.width) {
