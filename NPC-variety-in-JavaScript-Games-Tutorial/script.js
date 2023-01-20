@@ -13,11 +13,10 @@ addEventListener('load', function() {
             this.width = width
             this.height = height
             this.enemies = []
-            this.enemyInterval = 100
+            this.enemyInterval = 500
             this.enemyTimer = 0
             this.enemyTypes = ['worm', 'ghost']
             // this.#addNewEnemy() // nova instância do meu objeto, console.log(this.enemies) // ver se funcionou
-            
         }
 
         update(deltaTime) {
@@ -118,6 +117,21 @@ addEventListener('load', function() {
             this.y = Math.random() * this.game.height * 0.6
             this.image = ghost
             this.velocityX = Math.random() * 0.2 + 0.1
+            this.angle = 0
+            this.curve = Math.random() * 3
+        }
+
+        update(deltaTime) {
+            super.update(deltaTime)
+            this.y += Math.sin(this.angle) * this.curve
+            this.angle += 0.04
+        }
+
+        draw() {
+            c.save()
+            c.globalAlpha = 0.5
+            super.draw(c)
+            c.restore()
         }
     }
 
