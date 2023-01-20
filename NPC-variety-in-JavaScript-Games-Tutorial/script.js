@@ -15,7 +15,7 @@ addEventListener('load', function() {
             this.enemies = []
             this.enemyInterval = 500
             this.enemyTimer = 0
-            this.enemyTypes = ['worm', 'ghost']
+            this.enemyTypes = ['worm', 'ghost', 'spider']
             // this.#addNewEnemy() // nova instância do meu objeto, console.log(this.enemies) // ver se funcionou
         }
 
@@ -45,6 +45,8 @@ addEventListener('load', function() {
                 this.enemies.push(new Worm(this)) // agora fiz a substituição, this.enemies.push(new Enemy(this))
             } else if (randomEnemy == 'ghost') {
                 this.enemies.push(new Ghost(this))
+            } else if (randomEnemy == 'spider') {
+                this.enemies.push(new Spider(this))
             }
 
             // ordenando os inimigos por ordem crescente na posição y
@@ -127,11 +129,43 @@ addEventListener('load', function() {
             this.angle += 0.04
         }
 
-        draw() {
+        draw(c) {
             c.save()
             c.globalAlpha = 0.5
             super.draw(c)
             c.restore()
+        }
+    }
+
+    class Spider extends Enemy {
+        constructor() {
+            super(game)
+            this.spriteWidth = 310
+            this.spriteHeight = 175
+            this.width = this.spriteWidth / 2
+            this.height = this.spriteHeight / 2
+            this.x = Math.random() * this.game.width
+            this.y = 0 - this.height
+            this.image = spider
+            this.velocityX = 0
+            this.velocityY = Math.random() * 0.1 + 0.1
+            this.maxLength = Math.random() * this.game.height
+        }
+
+        update(deltaTime) {
+            super.update(deltaTime)
+            this.y += this.velocityY * deltaTime
+            if (this.y > this.maxLength) {
+                this.velocityY *= -1
+            }
+        }
+
+        draw(c) {
+            c.beginPath()
+            c.moveTo(this.x + this.width / 2, 0)
+            c.lineTo(this.x + this.width / 2, this.y + 10)
+            c.stroke()
+            super.draw(c)
         }
     }
 
